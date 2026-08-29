@@ -1,0 +1,211 @@
+{
+  "$schema": "../schema/standard_schema.json",
+  "standard_id": "IS_1599_2019",
+  "standard_number": "IS 1599",
+  "title": "Metallic Materials — Bend Test",
+  "short_title": "Metallic Materials Bend Testing Method",
+  "edition": "Fourth Revision",
+  "year": 2019,
+  "reaffirmation_year": null,
+  "status": "Active",
+  "domain": "Mechanical Engineering & Metallurgy",
+  "category": "Mechanical Testing & Quality Assurance",
+  "department": "Mechanical Engineering Department (MED)",
+  "technical_committee": "MED 04 (Mechanical Testing of Metals Sectional Committee)",
+  "ics_code": "77.040.10",
+  "scope": "This standard specifies the method for determining the ability of metallic materials to undergo plastic deformation in bending. It applies to test pieces taken from metallic products (sheets, strips, plates, bars, sections, wire) as specified in the relevant product standard.",
+  "description": "IS 1599:2019 (Fourth Revision) establishes the technical principles, testing equipment, test piece geometry, and defect evaluation for bend tests on metallic materials. It is identical to ISO 7438:2016. The bend test consists of subjecting a test piece of round, square, rectangular, or polygonal cross-section to plastic deformation by bending around a former/mandrel without reversing the direction of flexure, followed by optical examination for surface fissures or cracks.",
+  "key_requirements": [
+    {
+      "parameter": "Testing Ambient Temperature",
+      "requirement": "The test shall be carried out at ambient temperature between 10°C and 35°C unless otherwise specified.",
+      "acceptable_limit": "10°C - 35°C",
+      "permissible_limit": "23°C ± 5°C for controlled tests",
+      "unit": "°C",
+      "test_method": "IS 1599 Clause 7.1",
+      "clause_reference": "Clause 7.1"
+    },
+    {
+      "parameter": "Edge Rounding of Rectangular Test Pieces",
+      "requirement": "The edges of rectangular test pieces shall be rounded with a radius (r) not exceeding 0.1 times the thickness (0.1a) to prevent premature corner notch failure.",
+      "acceptable_limit": "r <= 0.1a (max 3 mm)",
+      "permissible_limit": "r <= 0.1a",
+      "unit": "mm",
+      "test_method": "IS 1599 Clause 6.4",
+      "clause_reference": "Clause 6.4"
+    },
+    {
+      "parameter": "Mandrel Former Diameter (d)",
+      "requirement": "The diameter of the bending mandrel or former shall conform strictly to the product specification ratio (d = k * a).",
+      "acceptable_limit": "As specified in product standard (e.g. 1a to 5a)",
+      "permissible_limit": "Tolerance ±0.5 mm",
+      "unit": "mm",
+      "test_method": "IS 1599 Clause 5.1",
+      "clause_reference": "Clause 5.1 & Table 1"
+    },
+    {
+      "parameter": "Angle of Bend (alpha)",
+      "requirement": "The test piece shall be bent to the angle specified in the relevant product standard (typically 90°, 120°, or 180°).",
+      "acceptable_limit": "180° (or as specified in product standard)",
+      "permissible_limit": "Specified angle ±2°",
+      "unit": "degrees (°)",
+      "test_method": "IS 1599 Clause 7.2",
+      "clause_reference": "Clause 7.2"
+    },
+    {
+      "parameter": "Surface Defect Acceptance Criteria",
+      "requirement": "After bending to the prescribed angle, the outer convex surface and sides of the test piece shall be visually inspected; no cracks, fissures, or tears visible without magnifying aids shall be permitted.",
+      "acceptable_limit": "Zero visible cracks on convex surface",
+      "permissible_limit": "Cracks at corners < 0.1a ignored unless origin is material flaw",
+      "unit": "qualitative inspection",
+      "test_method": "IS 1599 Clause 8.1",
+      "clause_reference": "Clause 8.1"
+    },
+    {
+      "parameter": "Bending Rate",
+      "requirement": "The bending load shall be applied smoothly and continuously at a rate not exceeding 30 mm/min to avoid dynamic shock loading.",
+      "acceptable_limit": "<= 30 mm/min",
+      "permissible_limit": "Smooth continuous strain",
+      "unit": "mm/min",
+      "test_method": "IS 1599 Clause 7.1.2",
+      "clause_reference": "Clause 7.1.2"
+    }
+  ],
+  "sections": [
+    {
+      "section_number": "1",
+      "title": "Scope",
+      "content": "This standard specifies the method for determining the ability of metallic materials to undergo plastic deformation in bending. This standard applies to test pieces taken from metallic products, as specified in the relevant product standard. It is not applicable to full cross-section tests on tubes and welded joints, which are covered by other dedicated standards.",
+      "page_number": 1,
+      "subsections": []
+    },
+    {
+      "section_number": "2",
+      "title": "Normative References",
+      "content": "The following referenced documents are indispensable for the application of this document: ISO 7438:2016 Metallic materials — Bend test, IS 1608 (Part 1) Metallic materials — Tensile testing, IS 1786 High strength deformed steel bars and wires for concrete reinforcement.",
+      "page_number": 1,
+      "subsections": []
+    },
+    {
+      "section_number": "3",
+      "title": "Symbols and Designations",
+      "content": "Key symbols used in the bend test: a = thickness or diameter of test piece (or diameter of inscribed circle for polygonal section); b = width of test piece; L = total length of test piece; l = distance between supports (l = d + 3a ± 0.5a); d = diameter of the mandrel or former; r = radius of edges of test piece; alpha = angle of bend.",
+      "page_number": 2,
+      "subsections": []
+    },
+    {
+      "section_number": "4",
+      "title": "Principle of Test",
+      "content": "The bend test consists of subjecting a test piece of round, square, rectangular, or polygonal cross-section to plastic deformation by bending around a former of known radius without reversing the direction of flexure. The operation is continued until one of the specified conditions (bend angle, parallel legs, or contact of legs) is reached.",
+      "page_number": 2,
+      "subsections": []
+    },
+    {
+      "section_number": "5",
+      "title": "Testing Equipment",
+      "content": "The test shall be carried out in testing machines or presses equipped with the following devices: a) Bending device with two supports and a former/mandrel; b) Bending device with a V-block and a former; c) Bending device with a clamp (flanging/wrapping device). The supports shall have a radius of curvature between 1 mm and 10 times the test piece thickness and must be hardened to prevent indentations.",
+      "page_number": 3,
+      "subsections": [
+        {
+          "clause_number": "5.1",
+          "title": "Bending Device with Supports and Mandrel",
+          "content": "The distance between the supports (l) shall be l = d + 3a unless otherwise stated in the product standard. The former shall move perpendicularly to the span, pressing at mid-length between supports.",
+          "page_number": 3
+        }
+      ]
+    },
+    {
+      "section_number": "6",
+      "title": "Test Piece Preparation",
+      "content": "Round, square, rectangular, or polygonal cross-section test pieces shall be used. For products with thickness <= 25 mm, the test piece thickness shall be the full product thickness. Edges of rectangular pieces shall be rounded with a radius not exceeding 0.1a to eliminate machining burrs and stress concentrations.",
+      "page_number": 4,
+      "subsections": [
+        {
+          "clause_number": "6.1",
+          "title": "Sampling and Orientation",
+          "content": "The test piece shall be prepared in accordance with the specifications of the relevant product standard, taking transverse or longitudinal samples as prescribed.",
+          "page_number": 4
+        }
+      ]
+    },
+    {
+      "section_number": "7",
+      "title": "Procedure",
+      "content": "The test is conducted at ambient temperature between 10°C and 35°C. The test piece is placed symmetrically on supports and bent by smoothly applying force through the mandrel. The bend angle (alpha) is measured either directly from the angle of the bent legs or by closing until legs are parallel (alpha = 180°).",
+      "page_number": 5,
+      "subsections": [
+        {
+          "clause_number": "7.1",
+          "title": "Bending Rate and Method",
+          "content": "The speed of the mandrel during bending shall not exceed 30 mm/min. For bending to 180° parallel legs, intermediate bending on supports is followed by direct pressing between parallel platens.",
+          "page_number": 5
+        }
+      ]
+    },
+    {
+      "section_number": "8",
+      "title": "Interpretation of Results",
+      "content": "The evaluation of the bend test shall be carried out in accordance with the requirements of the product standard. When these requirements are not specified, absence of surface cracks visible without magnifying aids on the tension side (convex surface) after bending is considered as evidence that the test piece passed the test.",
+      "page_number": 6,
+      "subsections": []
+    }
+  ],
+  "applicable_products_or_industries": [
+    "Structural Steel Rolling Mills and Fabrication Units",
+    "Thermo-Mechanically Treated (TMT) Rebar Manufacturers (IS 1786)",
+    "Boiler, Pressure Vessel, and Heavy Plate Fabricators",
+    "Automotive Chassis and Component Manufacturers",
+    "Sheet Metal Stamping and Cold Forming Facilities",
+    "Metallurgical Testing and Mechanical Calibration Laboratories",
+    "Welding Qualification and Material Inspection Agencies"
+  ],
+  "keywords": [
+    "bend test",
+    "metallic materials",
+    "IS 1599",
+    "plastic deformation",
+    "mandrel diameter",
+    "angle of bend",
+    "crack detection",
+    "ductility evaluation",
+    "former diameter",
+    "ISO 7438",
+    "mechanical testing of metals",
+    "MED 04"
+  ],
+  "related_standards": [
+    {
+      "standard_number": "ISO 7438",
+      "title": "Metallic Materials — Bend Test",
+      "relationship": "equivalent_to"
+    },
+    {
+      "standard_number": "IS 1608 (Part 1)",
+      "title": "Metallic Materials — Tensile Testing - Part 1: Method of Test at Room Temperature",
+      "relationship": "normative_reference"
+    },
+    {
+      "standard_number": "IS 1786",
+      "title": "High Strength Deformed Steel Bars and Wires for Concrete Reinforcement",
+      "relationship": "related_test_method"
+    },
+    {
+      "standard_number": "IS 2062",
+      "title": "Hot Rolled Medium and High Tensile Structural Steel — Specification",
+      "relationship": "related_test_method"
+    }
+  ],
+  "source": "Bureau of Indian Standards",
+  "source_url": "https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/8821",
+  "citation": {
+    "citation_text": "IS 1599:2019 - Metallic Materials — Bend Test (Fourth Revision), Bureau of Indian Standards, New Delhi.",
+    "standard": "IS 1599:2019",
+    "year": 2019
+  },
+  "metadata": {
+    "mandatory_certification": false,
+    "quality_control_order": null,
+    "last_amendment": "Identical adoption of ISO 7438:2016",
+    "version_tag": "v4.0"
+  }
+}
