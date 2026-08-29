@@ -171,3 +171,26 @@ Run the automated data test suite:
 ```bash
 python3 -m unittest backend/tests/test_standards_data.py
 ```
+
+---
+
+## 📖 Data Contribution Guidelines
+
+When adding new BIS standards to the dataset, follow these rules to maintain full compatibility with the RAG ingestion pipeline and compliance engine:
+
+1. **Schema Compliance**: Every standard JSON file must strictly conform to `data/schema/standard_schema.json`.
+2. **File Naming & Location**: Save files in `data/standards/` using the canonical pattern `IS_<NUMBER>_<YEAR>.json` (e.g., `IS_456_2000.json`).
+3. **Master Catalog Update**: Register the new standard in `data/standards_catalog.json` and update its `status_in_repo` to `"converted_to_json"`.
+4. **Authenticity & Verifiability**:
+   - Use only verified, publicly available BIS standard metadata.
+   - Do NOT use placeholder text (`"Lorem ipsum"`, `"TODO"`, `"Test data"`).
+5. **Key Requirements Structure**:
+   - Populate `key_requirements` with quantifiable limits (`acceptable_limit`, `permissible_limit`), appropriate units, test methods, and exact clause references to support automated `/compliance-check`.
+6. **Section-Level Chunking**:
+   - Structure `sections` and `subsections` with accurate `section_number`, `title`, `content`, and `page_number` to enable cited RAG retrieval.
+7. **Run Automated Validation**:
+   - Ensure all data tests pass before committing:
+     ```bash
+     python3 -m unittest backend/tests/test_standards_data.py
+     ```
+
