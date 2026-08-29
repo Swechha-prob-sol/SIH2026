@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+.env
+venv/
+__pycache__/
+*.pyc
+=======
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -50,3 +56,4 @@ yarn-error.log*
 .vscode/
 *.swp
 *.swo
+>>>>>>> 62e7787c4747431a97ac0d603fb3dc82a0383c67
