@@ -158,7 +158,11 @@ def query_standards(query_text: str, top_k: int = 2):
 
 # Run test queries if executed directly
 if __name__ == "__main__":
+    # Index standards chunks into Pinecone vector database
+    index_standards()
+
     test_queries = [
+
         "What are the acceptable limits for pH and TDS in drinking water according to IS 10500?",
         "What is the bend test procedure for metallic materials under IS 1599?",
         "What are the chemical composition requirements for carbon steel billets under IS 1875?"
