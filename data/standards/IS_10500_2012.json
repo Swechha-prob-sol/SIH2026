@@ -1,0 +1,280 @@
+{
+  "$schema": "../schema/standard_schema.json",
+  "standard_id": "IS_10500_2012",
+  "standard_number": "IS 10500",
+  "title": "Drinking Water — Specification",
+  "short_title": "Drinking Water Quality Specification",
+  "edition": "Second Revision",
+  "year": 2012,
+  "reaffirmation_year": 2018,
+  "status": "Active",
+  "domain": "Food Safety & Water Quality",
+  "category": "Potable Water & Public Health",
+  "department": "Food and Agriculture Division (FAD)",
+  "technical_committee": "FAD 25 (Drinking Water Sectional Committee)",
+  "ics_code": "13.060.20",
+  "scope": "This standard prescribes the requirements and the methods of sampling and test for drinking water (potable water) supplied through public distribution systems, packaged water sources, borewells, or treated water networks intended for human consumption.",
+  "description": "IS 10500:2012 is the primary regulatory standard for drinking water in India. It establishes a dual-tier limit system consisting of 'Acceptable Limits' (optimal quality without adverse health effects) and 'Permissible Limits in the Absence of Alternate Source' (upper safety thresholds for difficult terrains). It mandates zero tolerance for microbiological contamination (E. coli and Coliform bacteria) and defines limits for organoleptic, chemical, toxic, and radioactive contaminants.",
+  "key_requirements": [
+    {
+      "parameter": "pH Value",
+      "requirement": "Must be within the neutral to slightly basic range",
+      "acceptable_limit": "6.5 - 8.5",
+      "permissible_limit": "No relaxation",
+      "unit": "pH scale",
+      "test_method": "IS 3025 (Part 11)",
+      "clause_reference": "Table 1, Item 2"
+    },
+    {
+      "parameter": "Turbidity",
+      "requirement": "Low turbidity to ensure aesthetic clarity and disinfection efficacy",
+      "acceptable_limit": "1",
+      "permissible_limit": "5",
+      "unit": "NTU",
+      "test_method": "IS 3025 (Part 10)",
+      "clause_reference": "Table 1, Item 4"
+    },
+    {
+      "parameter": "Total Dissolved Solids (TDS)",
+      "requirement": "Total inorganic salts and organic matter dissolved in water",
+      "acceptable_limit": "500",
+      "permissible_limit": "2000",
+      "unit": "mg/l",
+      "test_method": "IS 3025 (Part 16)",
+      "clause_reference": "Table 1, Item 5"
+    },
+    {
+      "parameter": "Total Hardness (as CaCO3)",
+      "requirement": "Concentration of multivalent metallic cations (primarily calcium and magnesium)",
+      "acceptable_limit": "200",
+      "permissible_limit": "600",
+      "unit": "mg/l",
+      "test_method": "IS 3025 (Part 21)",
+      "clause_reference": "Table 2, Item 2"
+    },
+    {
+      "parameter": "Chloride (as Cl)",
+      "requirement": "Major inorganic anion contributing to salinity and corrosiveness",
+      "acceptable_limit": "250",
+      "permissible_limit": "1000",
+      "unit": "mg/l",
+      "test_method": "IS 3025 (Part 32)",
+      "clause_reference": "Table 2, Item 6"
+    },
+    {
+      "parameter": "Fluoride (as F)",
+      "requirement": "Essential trace element with toxic potential if consumed in excess",
+      "acceptable_limit": "1.0",
+      "permissible_limit": "1.5",
+      "unit": "mg/l",
+      "test_method": "IS 3025 (Part 60)",
+      "clause_reference": "Table 2, Item 11"
+    },
+    {
+      "parameter": "Nitrate (as NO3)",
+      "requirement": "Contaminant from agricultural runoff; linked to infant methemoglobinemia",
+      "acceptable_limit": "45",
+      "permissible_limit": "No relaxation",
+      "unit": "mg/l",
+      "test_method": "IS 3025 (Part 34)",
+      "clause_reference": "Table 2, Item 13"
+    },
+    {
+      "parameter": "Iron (as Fe)",
+      "requirement": "Secondary contaminant causing staining, taste, and turbidity issues",
+      "acceptable_limit": "0.3",
+      "permissible_limit": "No relaxation",
+      "unit": "mg/l",
+      "test_method": "IS 3025 (Part 53)",
+      "clause_reference": "Table 2, Item 3"
+    },
+    {
+      "parameter": "Arsenic (as As)",
+      "requirement": "Highly toxic carcinogen originating from geological formations and industrial discharge",
+      "acceptable_limit": "0.01",
+      "permissible_limit": "0.05",
+      "unit": "mg/l",
+      "test_method": "IS 3025 (Part 37)",
+      "clause_reference": "Table 3, Item 2"
+    },
+    {
+      "parameter": "Lead (as Pb)",
+      "requirement": "Cumulative toxic heavy metal causing neurological impairment",
+      "acceptable_limit": "0.01",
+      "permissible_limit": "No relaxation",
+      "unit": "mg/l",
+      "test_method": "IS 3025 (Part 47)",
+      "clause_reference": "Table 3, Item 4"
+    },
+    {
+      "parameter": "Residual Free Chlorine",
+      "requirement": "Chlorine residual in treated municipal water to safeguard against recontamination",
+      "acceptable_limit": "0.2",
+      "permissible_limit": "1.0",
+      "unit": "mg/l",
+      "test_method": "IS 3025 (Part 26)",
+      "clause_reference": "Table 2, Item 15"
+    },
+    {
+      "parameter": "Escherichia coli (E. coli)",
+      "requirement": "Indicator organism for faecal contamination; mandatory zero tolerance",
+      "acceptable_limit": "Shall not be detectable in any 100 ml sample",
+      "permissible_limit": "No relaxation",
+      "unit": "organisms/100 ml",
+      "test_method": "IS 1622",
+      "clause_reference": "Table 4, Item 1"
+    },
+    {
+      "parameter": "Total Coliform Bacteria",
+      "requirement": "General indicator for sanitary quality and treatment integrity",
+      "acceptable_limit": "Shall not be detectable in any 100 ml sample",
+      "permissible_limit": "No relaxation",
+      "unit": "organisms/100 ml",
+      "test_method": "IS 1622",
+      "clause_reference": "Table 4, Item 2"
+    }
+  ],
+  "sections": [
+    {
+      "section_number": "1",
+      "title": "Scope",
+      "content": "This standard prescribes the requirements and the methods of sampling and test for drinking water. It applies to water supplied for human consumption by municipal corporations, panchayats, water utilities, packaged water bottling plants, and individual community water supply schemes.",
+      "page_number": 1,
+      "subsections": [
+        {
+          "clause_number": "1.1",
+          "title": "Applicability",
+          "content": "This standard applies to water intended for human consumption, including water used for drinking, cooking, food preparation, and personal hygiene.",
+          "page_number": 1
+        }
+      ]
+    },
+    {
+      "section_number": "2",
+      "title": "Normative References",
+      "content": "The following standards contain provisions which, through reference in this text, constitute provisions of this standard: IS 1622 (Methods of sampling and microbiological examination of water), IS 3025 (Methods of sampling and physical and chemical examination of water and wastewater in multiple parts), IS 14543 (Packaged drinking water other than packaged natural mineral water).",
+      "page_number": 1,
+      "subsections": []
+    },
+    {
+      "section_number": "3",
+      "title": "Terminology",
+      "content": "For the purpose of this standard, drinking water is defined as water intended for human consumption that is clear, free from objectionable taste and odor, pathogenic organisms, toxic chemical substances, and radioactive materials in concentrations that could cause health hazards.",
+      "page_number": 2,
+      "subsections": [
+        {
+          "clause_number": "3.1",
+          "title": "Acceptable Limit",
+          "content": "The value of a parameter below which no health hazard is anticipated and water is aesthetically pleasing and wholesome for human consumption.",
+          "page_number": 2
+        },
+        {
+          "clause_number": "3.2",
+          "title": "Permissible Limit in the Absence of Alternate Source",
+          "content": "The maximum permissible concentration of a parameter which is acceptable only when no better quality water source is available in the geographic region.",
+          "page_number": 2
+        }
+      ]
+    },
+    {
+      "section_number": "4",
+      "title": "Requirements",
+      "content": "Drinking water shall comply with the organoleptic, physical, chemical, toxicological, and bacteriological requirements prescribed in Tables 1 through 4. Water shall not contain any substance in concentrations exceeding permissible limits.",
+      "page_number": 2,
+      "subsections": [
+        {
+          "clause_number": "4.1",
+          "title": "Organoleptic and Physical Parameters (Table 1)",
+          "content": "Color shall not exceed 5 Hazen units (permissible up to 15). Odour shall be agreeable. pH shall range between 6.5 and 8.5 with no relaxation. Taste shall be agreeable. Turbidity shall not exceed 1 NTU (permissible up to 5 NTU). Total Dissolved Solids shall not exceed 500 mg/l (permissible up to 2000 mg/l).",
+          "page_number": 2
+        },
+        {
+          "clause_number": "4.2",
+          "title": "General Chemical Parameters (Table 2)",
+          "content": "Total Hardness as CaCO3 shall not exceed 200 mg/l (permissible up to 600 mg/l). Iron content shall not exceed 0.3 mg/l with no relaxation. Chlorides shall not exceed 250 mg/l (permissible up to 1000 mg/l). Fluoride shall not exceed 1.0 mg/l (permissible up to 1.5 mg/l). Nitrate shall not exceed 45 mg/l with no relaxation.",
+          "page_number": 3
+        },
+        {
+          "clause_number": "4.3",
+          "title": "Parameters Concerning Toxic Substances (Table 3)",
+          "content": "Toxic contaminants must strictly remain below specified thresholds: Arsenic limit is 0.01 mg/l (0.05 mg/l permissible without alternative source); Cadmium 0.003 mg/l; Total Chromium 0.05 mg/l; Copper 0.05 mg/l (1.5 mg/l permissible); Cyanide 0.05 mg/l; Lead 0.01 mg/l (no relaxation); Mercury 0.001 mg/l (no relaxation); Nickel 0.02 mg/l.",
+          "page_number": 4
+        },
+        {
+          "clause_number": "4.4",
+          "title": "Bacteriological Requirements (Table 4)",
+          "content": "All samples of drinking water, whether from piped supplies or community collection points, must show zero detectable count of Escherichia coli (E. coli) or thermotolerant coliform bacteria in any 100 ml sample. Total Coliform bacteria must also not be detectable in any 100 ml sample for treated piped distribution.",
+          "page_number": 5
+        }
+      ]
+    },
+    {
+      "section_number": "5",
+      "title": "Sampling and Testing Protocols",
+      "content": "Representative samples of drinking water shall be drawn in accordance with the procedures prescribed in IS 1622 for microbiological tests and IS 3025 (Part 1) for physical and chemical tests. Testing frequency shall follow municipal guidelines ensuring daily monitoring of chlorine residual and coliforms.",
+      "page_number": 6,
+      "subsections": []
+    }
+  ],
+  "applicable_products_or_industries": [
+    "Municipal and Urban Water Supply Networks",
+    "Rural Piped Drinking Water Schemes (Jal Jeevan Mission)",
+    "Packaged Drinking Water and Mineral Water Manufacturers",
+    "Food Processing and Beverage Production Plants",
+    "Hospitality, Commercial Complexes, and Educational Campuses",
+    "Hospitals and Pharmaceutical Manufacturing",
+    "Water Purifier and RO System Manufacturers"
+  ],
+  "keywords": [
+    "drinking water",
+    "potable water",
+    "IS 10500",
+    "water quality standards",
+    "TDS limit",
+    "pH range",
+    "turbidity",
+    "coliform bacteria",
+    "E. coli",
+    "fluoride limit",
+    "arsenic limit",
+    "lead contamination",
+    "residual chlorine",
+    "BIS potable water specification",
+    "FAD 25"
+  ],
+  "related_standards": [
+    {
+      "standard_number": "IS 3025",
+      "title": "Methods of Sampling and Test (Physical and Chemical) for Water and Wastewater",
+      "relationship": "normative_reference"
+    },
+    {
+      "standard_number": "IS 1622",
+      "title": "Methods of Sampling and Microbiological Examination of Water",
+      "relationship": "normative_reference"
+    },
+    {
+      "standard_number": "IS 14543",
+      "title": "Packaged Drinking Water (Other than Packaged Natural Mineral Water) — Specification",
+      "relationship": "normative_reference"
+    },
+    {
+      "standard_number": "IS 13428",
+      "title": "Packaged Natural Mineral Water — Specification",
+      "relationship": "normative_reference"
+    }
+  ],
+  "source": "Bureau of Indian Standards",
+  "source_url": "https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/3364",
+  "citation": {
+    "citation_text": "IS 10500:2012 - Drinking Water — Specification (Second Revision), Bureau of Indian Standards, New Delhi.",
+    "standard": "IS 10500:2012",
+    "year": 2012
+  },
+  "metadata": {
+    "mandatory_certification": true,
+    "quality_control_order": "Drinking Water Quality Order / BIS Public Health Norms",
+    "last_amendment": "Amendment No. 2 (Incorporating revised limits for pesticides and heavy metals)",
+    "version_tag": "v2.1"
+  }
+}

@@ -1,0 +1,262 @@
+{
+  "$schema": "../schema/standard_schema.json",
+  "standard_id": "IS_1875_2020",
+  "standard_number": "IS 1875",
+  "title": "Carbon Steel Billets, Blooms, Slabs and Bars for Forgings — Specification",
+  "short_title": "Carbon Steel Forging Stock Specification",
+  "edition": "Fifth Revision",
+  "year": 2020,
+  "reaffirmation_year": 2020,
+  "status": "Active",
+  "domain": "Manufacturing & Metallurgy",
+  "category": "Forging Steels & Industrial Raw Materials",
+  "department": "Metallurgical Engineering Department (MTD)",
+  "technical_committee": "MTD 16 (Steel Forgings Sectional Committee)",
+  "ics_code": "77.140.85",
+  "scope": "This standard specifies requirements for carbon steel billets, blooms, slabs and bars intended for the manufacture of hot forgings across industrial, automotive, and general engineering applications.",
+  "description": "IS 1875:2020 (Fifth Revision, Reaffirmed 2020) covers plain carbon steel forging stock classified into graded categories (Classes 1 through 6, including modified grades like Class 1A, 2A, 3A). It defines mandatory deoxidation practices (fully killed steel), ladle and check chemical analysis limits, minimum tensile and yield strengths, impact properties, austenitic grain size, non-metallic inclusion limits, and ultrasonic inspection criteria under statutory Quality Control Orders.",
+  "key_requirements": [
+    {
+      "parameter": "Manufacturing & Deoxidation Practice",
+      "requirement": "The steel shall be manufactured by electric furnace, basic oxygen, or other recognized processes and shall be fully killed.",
+      "acceptable_limit": "Fully killed steel",
+      "permissible_limit": "Semi-killed steel not permitted",
+      "unit": "process method",
+      "test_method": "IS 1875 Clause 4.1",
+      "clause_reference": "Clause 4.1"
+    },
+    {
+      "parameter": "Chemical Composition — Class 2 Steel",
+      "requirement": "Carbon 0.18-0.28%, Manganese 0.60-0.90%, Silicon 0.15-0.35%, Sulfur 0.040% max, Phosphorus 0.040% max",
+      "acceptable_limit": "C: 0.18-0.28%, Mn: 0.60-0.90%",
+      "permissible_limit": "Product analysis tolerance: C ±0.02%, Mn ±0.04%",
+      "unit": "% mass fraction",
+      "test_method": "IS 228 (Relevant Parts)",
+      "clause_reference": "Table 1, Class 2"
+    },
+    {
+      "parameter": "Chemical Composition — Class 3 Steel",
+      "requirement": "Carbon 0.28-0.38%, Manganese 0.60-0.90%, Silicon 0.15-0.35%, Sulfur 0.040% max, Phosphorus 0.040% max",
+      "acceptable_limit": "C: 0.28-0.38%, Mn: 0.60-0.90%",
+      "permissible_limit": "Product analysis tolerance: C ±0.02%, Mn ±0.04%",
+      "unit": "% mass fraction",
+      "test_method": "IS 228 (Relevant Parts)",
+      "clause_reference": "Table 1, Class 3"
+    },
+    {
+      "parameter": "Chemical Composition — Class 4 Steel",
+      "requirement": "Carbon 0.40-0.50%, Manganese 0.60-0.90%, Silicon 0.15-0.35%, Sulfur 0.040% max, Phosphorus 0.040% max",
+      "acceptable_limit": "C: 0.40-0.50%, Mn: 0.60-0.90%",
+      "permissible_limit": "Product analysis tolerance: C ±0.02%, Mn ±0.04%",
+      "unit": "% mass fraction",
+      "test_method": "IS 228 (Relevant Parts)",
+      "clause_reference": "Table 1, Class 4"
+    },
+    {
+      "parameter": "Phosphorus & Sulfur Impurity Limits",
+      "requirement": "Harmful tramp impurities shall not exceed maximum specified thresholds to prevent hot shortness and cold embrittlement.",
+      "acceptable_limit": "S <= 0.040%, P <= 0.040%",
+      "permissible_limit": "S <= 0.045%, P <= 0.045% (product analysis)",
+      "unit": "% mass fraction",
+      "test_method": "IS 228 (Part 3 & 9)",
+      "clause_reference": "Table 1, Note 2"
+    },
+    {
+      "parameter": "Tensile Strength (Normalized Condition — Class 2)",
+      "requirement": "Minimum tensile strength of normalized test sample",
+      "acceptable_limit": "430 - 540",
+      "permissible_limit": "430 min",
+      "unit": "MPa (N/mm²)",
+      "test_method": "IS 1608 (Part 1)",
+      "clause_reference": "Table 2, Class 2"
+    },
+    {
+      "parameter": "Yield Strength (Normalized Condition — Class 2)",
+      "requirement": "Minimum yield stress or 0.2% proof stress",
+      "acceptable_limit": "230 min",
+      "permissible_limit": "230 min",
+      "unit": "MPa (N/mm²)",
+      "test_method": "IS 1608 (Part 1)",
+      "clause_reference": "Table 2, Class 2"
+    },
+    {
+      "parameter": "Elongation on Gauge Length 5.65√So (Class 2)",
+      "requirement": "Ductility percentage at fracture",
+      "acceptable_limit": "24 min",
+      "permissible_limit": "24 min",
+      "unit": "%",
+      "test_method": "IS 1608 (Part 1)",
+      "clause_reference": "Table 2, Class 2"
+    },
+    {
+      "parameter": "Austenitic Grain Size",
+      "requirement": "Steel shall exhibit predominantly fine austenitic grain size when tested in accordance with IS 4748.",
+      "acceptable_limit": "Grain size 5 to 8",
+      "permissible_limit": "Grain size 5 or finer",
+      "unit": "ASTM / IS Grain Size Index Number",
+      "test_method": "IS 4748",
+      "clause_reference": "Clause 8.1"
+    },
+    {
+      "parameter": "Ultrasonic Testing Integrity",
+      "requirement": "Bars, blooms, and billets above 50 mm equivalent diameter shall be ultrasonically tested to ensure freedom from internal piping and fissures.",
+      "acceptable_limit": "No defect echoes exceeding Level 2 calibration",
+      "permissible_limit": "Conforming to IS 7666 Level B",
+      "unit": "NDT echo reflection",
+      "test_method": "IS 7666",
+      "clause_reference": "Clause 9.3"
+    }
+  ],
+  "sections": [
+    {
+      "section_number": "1",
+      "title": "Scope",
+      "content": "This standard specifies requirements for carbon steel billets, blooms, slabs and bars for forgings. It covers six primary steel classes (Classes 1 through 6) based on carbon content and tensile properties, suitable for subsequent forging into machine components, automotive parts, shafts, gears, and structural forgings.",
+      "page_number": 1,
+      "subsections": [
+        {
+          "clause_number": "1.1",
+          "title": "Product Forms",
+          "content": "The standard applies to semi-finished forged, rolled, or continuously cast billets, blooms, slabs, and finished hot rolled forged bars intended for drop forging, upset forging, or open-die hammer forging.",
+          "page_number": 1
+        }
+      ]
+    },
+    {
+      "section_number": "2",
+      "title": "Normative References",
+      "content": "The following Indian Standards contain provisions which constitute provisions of this standard: IS 228 (Methods of chemical analysis of steels), IS 1500 (Method for Brinell hardness test for metallic materials), IS 1599 (Metallic materials — Bend test), IS 1608 (Part 1) (Metallic materials — Tensile testing), IS 1956 (Glossary of terms relating to iron and steel), IS 4748 (Steels — Micrographic determination of the apparent grain size), IS 7666 (Ultrasonic testing of steel forgings).",
+      "page_number": 1,
+      "subsections": []
+    },
+    {
+      "section_number": "3",
+      "title": "General Requirements for Supply",
+      "content": "General requirements relating to the supply of carbon steel forging stock shall conform to IS 8910. Steel shall be supplied in the as-rolled, as-forged, normalized, or annealed condition as agreed between the purchaser and manufacturer.",
+      "page_number": 2,
+      "subsections": []
+    },
+    {
+      "section_number": "4",
+      "title": "Manufacture and Deoxidation",
+      "content": "The steel shall be manufactured by electric arc furnace, induction furnace, or basic oxygen steelmaking process. The steel shall be fully killed with sufficient aluminum or silicon additions to guarantee fine grain structure and stability during subsequent forging heating cycles.",
+      "page_number": 2,
+      "subsections": [
+        {
+          "clause_number": "4.1",
+          "title": "Reduction Ratio",
+          "content": "For billets and bars produced from ingots, the total reduction ratio from ingot to final billet/bar section shall not be less than 3:1.",
+          "page_number": 2
+        }
+      ]
+    },
+    {
+      "section_number": "5",
+      "title": "Chemical Composition",
+      "content": "Ladle analysis of the steel shall conform to the requirements specified in Table 1 for the designated class. When tested on finished products, permissible variations from ladle limits shall conform to standard tolerances.",
+      "page_number": 3,
+      "subsections": [
+        {
+          "clause_number": "5.1",
+          "title": "Classification Table (Table 1 Summary)",
+          "content": "Class 1: C 0.10-0.18%, Mn 0.60-0.90%; Class 1A: C 0.15-0.25%, Mn 0.60-0.90%; Class 2: C 0.18-0.28%, Mn 0.60-0.90%; Class 2A: C 0.25-0.35%, Mn 0.60-0.90%; Class 3: C 0.28-0.38%, Mn 0.60-0.90%; Class 3A: C 0.35-0.45%, Mn 0.60-0.90%; Class 4: C 0.40-0.50%, Mn 0.60-0.90%; Class 5: C 0.50-0.60%, Mn 0.60-0.90%; Class 6: C 0.60-0.75%, Mn 0.60-0.90%. Silicon 0.15-0.35% for all classes. S and P max 0.040% each.",
+          "page_number": 3
+        }
+      ]
+    },
+    {
+      "section_number": "6",
+      "title": "Mechanical Properties",
+      "content": "Tensile and hardness properties evaluated on normalized test specimens shall satisfy the criteria specified in Table 2 for each respective class. Test pieces shall be prepared in accordance with IS 1608 (Part 1).",
+      "page_number": 4,
+      "subsections": [
+        {
+          "clause_number": "6.1",
+          "title": "Mechanical Properties Table (Table 2 Summary)",
+          "content": "Class 1: Tensile 370-480 MPa, Yield 200 MPa min, Elongation 26% min; Class 2: Tensile 430-540 MPa, Yield 230 MPa min, Elongation 24% min; Class 3: Tensile 490-610 MPa, Yield 250 MPa min, Elongation 21% min; Class 4: Tensile 620-750 MPa, Yield 320 MPa min, Elongation 15% min; Class 5: Tensile 710-840 MPa, Yield 350 MPa min, Elongation 12% min; Class 6: Tensile 780-910 MPa, Yield 400 MPa min, Elongation 10% min.",
+          "page_number": 4
+        }
+      ]
+    },
+    {
+      "section_number": "7",
+      "title": "Freedom from Defects & Surface Quality",
+      "content": "Billets, blooms, slabs, and bars shall be well-conditioned, cleanly rolled/forged, and reasonably free from cracks, flakes, laps, seams, deep scabs, rokes, and piping. Any surface defects may be removed by mechanical grinding or chipping provided the remaining section satisfies minimum dimensional tolerances.",
+      "page_number": 5,
+      "subsections": []
+    },
+    {
+      "section_number": "8",
+      "title": "Marking, Packaging, and BIS Certification",
+      "content": "Each billet, bloom, slab, or bar bundle shall be legibly marked or tagged with the manufacturer's name or trademark, cast/heat number, steel class, and the Standard Mark (ISI mark) under the BIS certification scheme.",
+      "page_number": 6,
+      "subsections": []
+    }
+  ],
+  "applicable_products_or_industries": [
+    "Automotive Forging Units (Connecting Rods, Crankshafts, Steering Knuckles, Flanges)",
+    "Railway Rolling Stock & Locomotive Component Manufacturers",
+    "Heavy Engineering Machinery & Transmission Gear Forgings",
+    "Oil, Gas & Petrochemical Flange and Valve Body Forgers",
+    "Power Generation Turbine Rotor & Shaft Forgings",
+    "Mini Steel Plants and Secondary Steel Forging Mills"
+  ],
+  "keywords": [
+    "carbon steel",
+    "IS 1875",
+    "billets",
+    "blooms",
+    "slabs",
+    "bars for forgings",
+    "Class 1 steel",
+    "Class 2 steel",
+    "Class 3 steel",
+    "Class 4 steel",
+    "fully killed steel",
+    "forging stock",
+    "tensile strength",
+    "yield strength",
+    "MTD 16",
+    "BIS steel certification"
+  ],
+  "related_standards": [
+    {
+      "standard_number": "IS 228",
+      "title": "Methods of Chemical Analysis of Steels",
+      "relationship": "normative_reference"
+    },
+    {
+      "standard_number": "IS 1608 (Part 1)",
+      "title": "Metallic Materials — Tensile Testing - Part 1: Method of Test at Room Temperature",
+      "relationship": "normative_reference"
+    },
+    {
+      "standard_number": "IS 1500",
+      "title": "Method for Brinell Hardness Test for Metallic Materials",
+      "relationship": "normative_reference"
+    },
+    {
+      "standard_number": "IS 4748",
+      "title": "Steels — Micrographic Determination of the Apparent Grain Size",
+      "relationship": "normative_reference"
+    },
+    {
+      "standard_number": "IS 7666",
+      "title": "Ultrasonic Testing of Steel Forgings",
+      "relationship": "normative_reference"
+    }
+  ],
+  "source": "Bureau of Indian Standards",
+  "source_url": "https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/9012",
+  "citation": {
+    "citation_text": "IS 1875:2020 - Carbon Steel Billets, Blooms, Slabs and Bars for Forgings — Specification (Fifth Revision), Bureau of Indian Standards, New Delhi.",
+    "standard": "IS 1875:2020",
+    "year": 2020
+  },
+  "metadata": {
+    "mandatory_certification": true,
+    "quality_control_order": "Steel and Steel Products (Quality Control) Order, Ministry of Steel",
+    "last_amendment": "Reaffirmed 2020 with updated NDT ultrasonic test references",
+    "version_tag": "v5.2"
+  }
+}
