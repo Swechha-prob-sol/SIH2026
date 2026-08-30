@@ -18,12 +18,11 @@ def get_standards(db: Session = Depends(get_db)):
 
     return [
         {
-            "standard_id": standard.standard_id,
-            "standard_number": standard.standard_number,
+            "id": standard.id,
+            "code": standard.code,
             "title": standard.title,
-            "year": standard.year,
-            "status": standard.status,
-            "domain": standard.domain,
+            "description": standard.description,
+            "created_at": standard.created_at,
         }
         for standard in standards
-    ]   
+    ]
