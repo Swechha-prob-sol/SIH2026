@@ -273,5 +273,36 @@
       "mandatory_certification": false,
       "description": "Prescribes the closed cup test method using the Pensky-Martens apparatus for determining the flash point of fuel oils, lubricating oils, liquids containing suspended solids, and liquids tending to form surface films under test conditions."
     }
+  ],
+  "schemes_and_laboratories": [
+    {
+      "scheme_id": "SCHEME_ISI_MARK_2024",
+      "title": "BIS Product Certification Scheme (ISI Mark Scheme — Scheme I)",
+      "file_path": "data/schemes/ISI_MARK_SCHEME.json",
+      "category": "Product Certification",
+      "status": "Active"
+    },
+    {
+      "scheme_id": "SCHEME_CRS_2024",
+      "title": "BIS Compulsory Registration Scheme (CRS — Scheme II for Electronics and IT Goods)",
+      "file_path": "data/schemes/CRS_SCHEME.json",
+      "category": "Self-Declaration of Conformity",
+      "status": "Active"
+    },
+    {
+      "scheme_id": "SCHEME_HALLMARKING_2024",
+      "title": "BIS Hallmarking Scheme for Gold and Silver Precious Metal Jewellery",
+      "file_path": "data/schemes/HALLMARKING_SCHEME.json",
+      "category": "Precious Metals Hallmarking",
+      "status": "Active"
+    },
+    {
+      "scheme_id": "BIS_RECOGNIZED_LABS_2024",
+      "title": "Directory of BIS Central, Regional, and Recognized External Testing Laboratories",
+      "file_path": "data/schemes/BIS_RECOGNIZED_LABS.json",
+      "category": "Testing & Laboratory Recognition",
+      "status": "Active",
+      "total_laboratories": 15
+    }
   ]
 }
