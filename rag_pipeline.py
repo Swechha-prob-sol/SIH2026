@@ -3,7 +3,8 @@ import json
 import logging
 from pathlib import Path
 from dotenv import load_dotenv
-from openai import OpenAI
+from google import genai
+from google.genai import types
 from pinecone import Pinecone, ServerlessSpec
 
 # Configure logging
@@ -11,15 +12,18 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger("rag_pipeline")
 
 # Load environment variables
-load_dotenv()
+load_dotenv(Path(__file__).parent / "backend" / ".env")
 
 # 1. Initialize Clients
 api_key = os.getenv("PINECONE_API_KEY")
-openai_key = os.getenv("OPENAI_API_KEY")
+gemini_key = os.getenv("GEMINI_API_KEY")
 
 pc = Pinecone(api_key=api_key) if api_key else None
-client = OpenAI(api_key=openai_key) if openai_key else None
+client = genai.Client(api_key=gemini_key) if gemini_key else None
 index_name = os.getenv("PINECONE_INDEX_NAME", "sih-rag-index")
+
+EMBEDDING_MODEL = "gemini-embedding-001"
+EMBEDDING_DIMENSION = 768  # matches the existing live Pinecone index
 
 # 2. Create Pinecone Index (if it does not exist)
 index = None
@@ -36,7 +40,7 @@ if pc:
             logger.info(f"Creating index: {index_name}...")
             pc.create_index(
                 name=index_name,
-                dimension=1536,  # Vector size for text-embedding-3-small
+                dimension=EMBEDDING_DIMENSION,  # matches existing live Pinecone index
                 metric="cosine",
                 spec=ServerlessSpec(cloud="aws", region="us-east-1"),
             )
@@ -111,17 +115,22 @@ else:
 # 4. Embed and Upsert Chunks to Pinecone
 def index_standards():
     if not client or not index:
-        logger.warning("Pinecone or OpenAI client not configured. Skipping indexing.")
+        logger.warning("Pinecone or Gemini client not configured. Skipping indexing.")
         return
 
     logger.info(f"Generating embeddings for {len(chunks)} chunks...")
     vectors_to_upsert = []
     for chunk in chunks:
         try:
-            response = client.embeddings.create(
-                input=chunk["text"], model="text-embedding-3-small"
+            response = client.models.embed_content(
+                model=EMBEDDING_MODEL,
+                contents=chunk["text"],
+                config=types.EmbedContentConfig(
+                    task_type="RETRIEVAL_DOCUMENT",
+                    output_dimensionality=EMBEDDING_DIMENSION,
+                ),
             )
-            embedding = response.data[0].embedding
+            embedding = response.embeddings[0].values
             vectors_to_upsert.append({
                 "id": chunk["id"],
                 "values": embedding,
@@ -145,11 +154,15 @@ def query_standards(query_text: str, top_k: int = 2):
         return []
 
     try:
-        query_vector = (
-            client.embeddings.create(input=query_text, model="text-embedding-3-small")
-            .data[0]
-            .embedding
+        response = client.models.embed_content(
+            model=EMBEDDING_MODEL,
+            contents=query_text,
+            config=types.EmbedContentConfig(
+                task_type="RETRIEVAL_QUERY",
+                output_dimensionality=EMBEDDING_DIMENSION,
+            ),
         )
+        query_vector = response.embeddings[0].values
         results = index.query(vector=query_vector, top_k=top_k, include_metadata=True)
         return results.get("matches", [])
     except Exception as e:
