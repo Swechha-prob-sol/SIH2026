@@ -3,9 +3,20 @@ import json
 import logging
 from pathlib import Path
 from dotenv import load_dotenv
-from google import genai
-from google.genai import types
-from pinecone import Pinecone, ServerlessSpec
+
+try:
+    from google import genai
+    from google.genai import types
+except Exception:
+    genai = None
+    types = None
+
+try:
+    from pinecone import Pinecone, ServerlessSpec
+except Exception:
+    Pinecone = None
+    ServerlessSpec = None
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
