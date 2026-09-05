@@ -48,8 +48,21 @@ function ChatWindow() {
             let sourcesList: { title: string; description: string }[] = [];
 
             if (data.results && data.results.length > 0) {
-                const topResult = data.results[0];
-                assistantContent = topResult.text || `Relevant Standard Found: ${topResult.title || topResult.standard_number}`;
+                // Pick the result with highest keyword relevance to query
+                const queryWords = trimmedMessage.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+                let bestMatch = data.results[0];
+                let maxHits = -1;
+
+                for (const item of data.results) {
+                    const fullStr = `${item.title || ''} ${item.standard_number || ''} ${item.text || ''}`.toLowerCase();
+                    const hits = queryWords.reduce((acc, w) => acc + (fullStr.includes(w) ? 1 : 0), 0);
+                    if (hits > maxHits) {
+                        maxHits = hits;
+                        bestMatch = item;
+                    }
+                }
+
+                assistantContent = bestMatch.text || `Relevant Standard Found: ${bestMatch.title || bestMatch.standard_number}`;
 
                 sourcesList = data.results.map((item: any) => ({
                     title: `${item.standard_number || item.standard_id || "BIS Standard"} - ${item.title || "Indian Standard"}`,
