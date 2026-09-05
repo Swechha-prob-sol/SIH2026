@@ -50,13 +50,21 @@ if pc:
     except Exception as e:
         logger.warning(f"Pinecone initialization skipped or failed: {e}")
 
-# 3. Load & Process Real BIS Standards JSON Files
-standards_dir = Path(__file__).parent / "data" / "standards"
+# 3. Load & Process Real BIS Standards and Schemes JSON Files
+data_dirs = [
+    Path(__file__).parent / "data" / "standards",
+    Path(__file__).parent / "data" / "schemes"
+]
 chunks = []
 
-if standards_dir.exists() and list(standards_dir.glob("*.json")):
-    logger.info(f"Found real BIS standards JSON files in {standards_dir}")
-    for json_file in standards_dir.glob("*.json"):
+json_files = []
+for d in data_dirs:
+    if d.exists():
+        json_files.extend(d.glob("*.json"))
+
+if json_files:
+    logger.info(f"Found {len(json_files)} BIS standards & schemes JSON files in data directory.")
+    for json_file in json_files:
         with open(json_file, "r", encoding="utf-8") as f:
             std = json.load(f)
 
@@ -65,7 +73,7 @@ if standards_dir.exists() and list(standards_dir.glob("*.json")):
         title = std.get("title", "")
 
         # Scope & Description chunk
-        overview_text = f"Standard: {std_num} - {title}. Scope: {std.get('scope', '')}. Description: {std.get('description', '')}"
+        overview_text = f"Document: {std_num} - {title}. Scope: {std.get('scope', '')}. Description: {std.get('description', '')}"
         chunks.append({
             "id": f"{std_id}-overview",
             "text": overview_text,
@@ -82,26 +90,44 @@ if standards_dir.exists() and list(standards_dir.glob("*.json")):
                 perm = req.get("permissible_limit", "")
                 unit = req.get("unit", "")
                 req_text_list.append(f"{param}: Acceptable={acc} {unit}, Permissible={perm} {unit}. Requirement: {req.get('requirement', '')}")
-            req_chunk_text = f"Standard: {std_num} Key Requirements:\n" + "\n".join(req_text_list)
+            req_chunk_text = f"Document: {std_num} Key Requirements:\n" + "\n".join(req_text_list)
             chunks.append({
                 "id": f"{std_id}-requirements",
                 "text": req_chunk_text,
                 "metadata": {"standard_id": std_id, "standard_number": std_num, "title": title, "type": "key_requirements", "text": req_chunk_text}
             })
 
+        # Laboratories chunk (if present)
+        labs = std.get("laboratories", [])
+        if labs:
+            for lab in labs:
+                lab_id = lab.get("lab_id", "")
+                lab_name = lab.get("name", "")
+                region = lab.get("region", "")
+                city = lab.get("city", "")
+                state = lab.get("state", "")
+                cat = lab.get("category", "")
+                stds = ", ".join(lab.get("primary_standards_tested", []))
+                lab_text = f"BIS Recognized Testing Laboratory: {lab_name} ({lab_id}). Region: {region}. Location: {city}, {state}. Category: {cat}. Primary Standards Tested: {stds}. Status: {lab.get('recognition_status', '')}."
+                chunks.append({
+                    "id": f"{std_id}-lab-{lab_id}",
+                    "text": lab_text,
+                    "metadata": {"standard_id": std_id, "standard_number": std_num, "title": lab_name, "type": "laboratory", "text": lab_text}
+                })
+
         # Sections chunks
         for i, sec in enumerate(std.get("sections", [])):
             sec_num = sec.get("section_number", str(i + 1))
             sec_title = sec.get("title", "")
             sec_content = sec.get("content", "")
-            sec_text = f"Standard: {std_num} Section {sec_num} ({sec_title}): {sec_content}"
+            sec_text = f"Document: {std_num} Section {sec_num} ({sec_title}): {sec_content}"
             chunks.append({
                 "id": f"{std_id}-sec-{sec_num}",
                 "text": sec_text,
                 "metadata": {"standard_id": std_id, "standard_number": std_num, "title": title, "type": "section", "section_number": sec_num, "text": sec_text}
             })
 else:
-    logger.info("No JSON standards found in data/standards, using fallback sample standard.")
+    logger.info("No JSON files found, using fallback sample standard.")
     sample_standard = {
         "id": "bis-standard-001",
         "text": "BIS IS 732: Code of practice for electrical wiring installations. All internal electrical wiring must follow earthing and conductor protection protocols.",
