@@ -206,16 +206,56 @@ def query_standards(query_text: str, top_k: int = 2):
         logger.error(f"Error during query '{query_text}': {e}")
         return []
 
+# 6. "Recommend Standards" Helper Function (For Member 4 - Compliance Checker)
+def recommend_standards_for_product(product_description: str, top_k: int = 3):
+    """
+    Given a product description (e.g. 'packaged drinking water', 'gold jewellery', 'lithium ion battery'),
+    retrieves matching BIS standards, certification schemes, and accredited testing laboratories using Gemini.
+    """
+    query = f"Applicable BIS Indian Standards, certification scheme rules, and testing requirements for {product_description}"
+    matches = query_standards(query, top_k=top_k)
+
+    recommended_standards = []
+    applicable_schemes = []
+    recommended_labs = []
+
+    for match in matches:
+        metadata = match.get("metadata", {})
+        score = round(match.get("score", 0.0), 4)
+        chunk_type = metadata.get("type", "")
+
+        item_info = {
+            "title": metadata.get("title") or metadata.get("standard_number"),
+            "standard_number": metadata.get("standard_number"),
+            "relevance_score": score,
+            "matched_excerpt": metadata.get("text", "")
+        }
+
+        if chunk_type == "laboratory":
+            recommended_labs.append(item_info)
+        elif "scheme" in str(metadata.get("standard_id", "")).lower() or "scheme" in str(metadata.get("title", "")).lower():
+            applicable_schemes.append(item_info)
+        else:
+            recommended_standards.append(item_info)
+
+    return {
+        "product_description": product_description,
+        "total_matches_found": len(matches),
+        "recommended_standards": recommended_standards,
+        "applicable_schemes": applicable_schemes,
+        "accredited_testing_labs": recommended_labs
+    }
+
 # Run test queries if executed directly
 if __name__ == "__main__":
     # Index standards chunks into Pinecone vector database
     index_standards()
 
     test_queries = [
-
         "What are the acceptable limits for pH and TDS in drinking water according to IS 10500?",
-        "What is the bend test procedure for metallic materials under IS 1599?",
-        "What are the chemical composition requirements for carbon steel billets under IS 1875?"
+        "What are the mandatory hallmarking purity grades and HUID rules for gold jewellery?",
+        "Which electronics require self-declaration of conformity under the BIS Compulsory Registration Scheme (CRS)?",
+        "Which BIS testing laboratories in Northern Region test drinking water and steel?"
     ]
 
     for q in test_queries:
@@ -227,3 +267,7 @@ if __name__ == "__main__":
             text = match.get('metadata', {}).get('text', '')
             print(f"Score: {score:.4f}")
             print(f"Content: {text}\n")
+
+    print("\n--- Testing Product Recommendation for Member 4 ---")
+    rec = recommend_standards_for_product("22K Gold Jewellery Ring")
+    print(json.dumps(rec, indent=2))
