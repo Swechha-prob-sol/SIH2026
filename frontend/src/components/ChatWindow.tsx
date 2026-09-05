@@ -5,41 +5,80 @@ function ChatWindow() {
     const [message, setMessage] = useState("");
 
     const [messages, setMessages] = useState<
-        { role: "user" | "assistant"; content: string }[]
+        { role: "user" | "assistant"; content: string; sources?: { title: string; description: string }[] }[]
     >([]);
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const trimmedMessage = message.trim();
-
         if (!trimmedMessage || isLoading) return;
+
+        const userMsg = { role: "user" as const, content: trimmedMessage };
 
         setMessages((previousMessages) => [
             ...previousMessages,
-            {
-                role: "user",
-                content: trimmedMessage,
-            },
+            userMsg,
         ]);
 
         setMessage("");
         setIsLoading(true);
 
-        setTimeout(() => {
+        try {
+            const response = await fetch("http://localhost:8000/query", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    query_text: trimmedMessage,
+                    top_k: 3,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Server status ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            let assistantContent = "";
+            let sourcesList: { title: string; description: string }[] = [];
+
+            if (data.results && data.results.length > 0) {
+                const topResult = data.results[0];
+                assistantContent = topResult.text || `Relevant Standard Found: ${topResult.title || topResult.standard_number}`;
+
+                sourcesList = data.results.map((item: any) => ({
+                    title: `${item.standard_number || item.standard_id || "BIS Standard"} - ${item.title || "Indian Standard"}`,
+                    description: item.text ? (item.text.length > 150 ? item.text.substring(0, 150) + "..." : item.text) : `Match Score: ${(item.score * 100).toFixed(1)}%`,
+                }));
+            } else {
+                assistantContent = "No matching BIS standards found for your query. Please rephrase or check standard codes.";
+            }
+
             setMessages((previousMessages) => [
                 ...previousMessages,
                 {
                     role: "assistant",
-                    content:
-                        "Your query has been received. BIS Assistant will process it.",
+                    content: assistantContent,
+                    sources: sourcesList,
                 },
             ]);
-
+        } catch (err) {
+            console.error("Backend fetch error:", err);
+            setMessages((previousMessages) => [
+                ...previousMessages,
+                {
+                    role: "assistant",
+                    content: "Could not connect to the backend server. Please make sure Uvicorn backend is running on http://localhost:8000.",
+                },
+            ]);
+        } finally {
             setIsLoading(false);
-        }, 1200);
+        }
     };
     return (
         <div className="flex h-full flex-col bg-[#f5f7fa]">
@@ -142,16 +181,19 @@ function ChatWindow() {
 
                                     <div>{msg.content}</div>
 
-                                    {msg.role === "assistant" && (
+                                    {msg.role === "assistant" && msg.sources && msg.sources.length > 0 && (
                                         <div className="mt-4 border-t border-slate-200 pt-3">
                                             <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                                                Sources
+                                                Retrieved Sources ({msg.sources.length})
                                             </p>
 
-                                            <SourceCard
-                                                title="BIS document"
-                                                description="Retrieved source will appear here when the BIS knowledge system is connected."
-                                            />
+                                            {msg.sources.map((src, sIdx) => (
+                                                <SourceCard
+                                                    key={sIdx}
+                                                    title={src.title}
+                                                    description={src.description}
+                                                />
+                                            ))}
                                         </div>
                                     )}
                                 </div>
