@@ -23,42 +23,66 @@ function ChatWindow() {
         setIsLoading(true);
 
         try {
-            const response = await axios.post(`${BACKEND_URL}/query`, {
-                query_text: trimmedMessage,
-                top_k: 3,
+            const response = await fetch(`${BACKEND_URL}/query`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    query_text: trimmedMessage,
+                    top_k: 3,
+                }),
             });
 
-            const results = response.data?.results ?? [];
+            if (!response.ok) {
+                throw new Error(`Server status ${response.status}`);
+            }
 
-            // Build answer text from top result or fallback
-            const answerText =
-                results.length > 0
-                    ? results[0]?.text ||
-                      "BIS Assistant found relevant standards. See sources below."
-                    : "No matching BIS standards found for your query. Please try rephrasing.";
+            const data = await response.json();
 
-            // Build source cards from all results
-            const sources: Source[] = results.map((r: { standard_number?: string; title?: string; text?: string }) => ({
-                title: r.standard_number
-                    ? `${r.standard_number} — ${r.title ?? ""}`
-                    : (r.title ?? "BIS Document"),
-                description: r.text
-                    ? r.text.slice(0, 160) + (r.text.length > 160 ? "..." : "")
-                    : "Retrieved from BIS knowledge base.",
-            }));
+            let assistantContent = "";
+            let sourcesList: Source[] = [];
 
-            setMessages((prev) => [
-                ...prev,
-                { role: "assistant", content: answerText, sources },
-            ]);
-        } catch {
+            if (data.results && data.results.length > 0) {
+                // Pick the result with highest keyword relevance to query
+                const queryWords = trimmedMessage.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+                let bestMatch = data.results[0];
+                let maxHits = -1;
+
+                for (const item of data.results) {
+                    const fullStr = `${item.title || ''} ${item.standard_number || ''} ${item.text || ''}`.toLowerCase();
+                    const hits = queryWords.reduce((acc, w) => acc + (fullStr.includes(w) ? 1 : 0), 0);
+                    if (hits > maxHits) {
+                        maxHits = hits;
+                        bestMatch = item;
+                    }
+                }
+
+                assistantContent = bestMatch.text || `Relevant Standard Found: ${bestMatch.title || bestMatch.standard_number}`;
+
+                sourcesList = data.results.map((item: any) => ({
+                    title: `${item.standard_number || item.standard_id || "BIS Standard"} - ${item.title || "Indian Standard"}`,
+                    description: item.text ? (item.text.length > 150 ? item.text.substring(0, 150) + "..." : item.text) : `Match Score: ${(item.score * 100).toFixed(1)}%`,
+                }));
+            } else {
+                assistantContent = "No matching BIS standards found for your query. Please rephrase or check standard codes.";
+            }
+
             setMessages((prev) => [
                 ...prev,
                 {
                     role: "assistant",
-                    content:
-                        "Unable to reach the BIS backend. Please ensure the backend server is running at http://localhost:8000.",
-                    sources: [],
+                    content: assistantContent,
+                    sources: sourcesList,
+                },
+            ]);
+        } catch (err) {
+            console.error("Backend fetch error:", err);
+            setMessages((prev) => [
+                ...prev,
+                {
+                    role: "assistant",
+                    content: "Could not connect to the backend server. Please make sure Uvicorn backend is running on http://localhost:8000.",
                 },
             ]);
         } finally {
@@ -166,26 +190,19 @@ function ChatWindow() {
 
                                     <div>{msg.content}</div>
 
-                                    {msg.role === "assistant" && (
+                                    {msg.role === "assistant" && msg.sources && msg.sources.length > 0 && (
                                         <div className="mt-4 border-t border-slate-200 pt-3">
                                             <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                                                Sources
+                                                Retrieved Sources ({msg.sources.length})
                                             </p>
 
-                                            {msg.sources && msg.sources.length > 0 ? (
-                                                msg.sources.map((src, i) => (
-                                                    <SourceCard
-                                                        key={i}
-                                                        title={src.title}
-                                                        description={src.description}
-                                                    />
-                                                ))
-                                            ) : (
+                                            {msg.sources.map((src, sIdx) => (
                                                 <SourceCard
-                                                    title="BIS document"
-                                                    description="No sources retrieved."
+                                                    key={sIdx}
+                                                    title={src.title}
+                                                    description={src.description}
                                                 />
-                                            )}
+                                            ))}
                                         </div>
                                     )}
                                 </div>
