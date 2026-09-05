@@ -1,0 +1,302 @@
+import os
+import json
+import logging
+from pathlib import Path
+from dotenv import load_dotenv
+
+try:
+    from google import genai
+    from google.genai import types
+except Exception:
+    genai = None
+    types = None
+
+try:
+    from pinecone import Pinecone, ServerlessSpec
+except Exception:
+    Pinecone = None
+    ServerlessSpec = None
+
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger("rag_pipeline")
+
+# Load environment variables
+load_dotenv(Path(__file__).parent / "backend" / ".env")
+
+# 1. Initialize Clients
+api_key = os.getenv("PINECONE_API_KEY")
+gemini_key = os.getenv("GEMINI_API_KEY")
+
+pc = Pinecone(api_key=api_key) if api_key else None
+client = genai.Client(api_key=gemini_key) if gemini_key else None
+index_name = os.getenv("PINECONE_INDEX_NAME", "sih-rag-index")
+
+EMBEDDING_MODEL = "gemini-embedding-001"
+EMBEDDING_DIMENSION = 768  # matches the existing live Pinecone index
+
+# 2. Create Pinecone Index (if it does not exist)
+index = None
+if pc:
+    try:
+        indexes_list = pc.list_indexes()
+        existing_indexes = (
+            indexes_list.names()
+            if hasattr(indexes_list, "names")
+            else [idx.name if hasattr(idx, "name") else idx["name"] for idx in indexes_list]
+        )
+
+        if index_name not in existing_indexes:
+            logger.info(f"Creating index: {index_name}...")
+            pc.create_index(
+                name=index_name,
+                dimension=EMBEDDING_DIMENSION,  # matches existing live Pinecone index
+                metric="cosine",
+                spec=ServerlessSpec(cloud="aws", region="us-east-1"),
+            )
+            logger.info("Index created successfully!")
+
+        index = pc.Index(index_name)
+    except Exception as e:
+        logger.warning(f"Pinecone initialization skipped or failed: {e}")
+
+# 3. Load & Process Real BIS Standards and Schemes JSON Files
+data_dirs = [
+    Path(__file__).parent / "data" / "standards",
+    Path(__file__).parent / "data" / "schemes"
+]
+chunks = []
+
+json_files = []
+for d in data_dirs:
+    if d.exists():
+        json_files.extend(d.glob("*.json"))
+
+if json_files:
+    logger.info(f"Found {len(json_files)} BIS standards & schemes JSON files in data directory.")
+    for json_file in json_files:
+        with open(json_file, "r", encoding="utf-8") as f:
+            std = json.load(f)
+
+        std_id = std.get("standard_id", json_file.stem)
+        std_num = std.get("standard_number", std_id)
+        title = std.get("title", "")
+
+        # Scope & Description chunk
+        overview_text = f"Document: {std_num} - {title}. Scope: {std.get('scope', '')}. Description: {std.get('description', '')}"
+        chunks.append({
+            "id": f"{std_id}-overview",
+            "text": overview_text,
+            "metadata": {"standard_id": std_id, "standard_number": std_num, "title": title, "type": "overview", "text": overview_text}
+        })
+
+        # Key requirements chunk
+        reqs = std.get("key_requirements", [])
+        if reqs:
+            req_text_list = []
+            for req in reqs:
+                param = req.get("parameter", "")
+                acc = req.get("acceptable_limit", "")
+                perm = req.get("permissible_limit", "")
+                unit = req.get("unit", "")
+                req_text_list.append(f"{param}: Acceptable={acc} {unit}, Permissible={perm} {unit}. Requirement: {req.get('requirement', '')}")
+            req_chunk_text = f"Document: {std_num} Key Requirements:\n" + "\n".join(req_text_list)
+            chunks.append({
+                "id": f"{std_id}-requirements",
+                "text": req_chunk_text,
+                "metadata": {"standard_id": std_id, "standard_number": std_num, "title": title, "type": "key_requirements", "text": req_chunk_text}
+            })
+
+        # Laboratories chunk (if present)
+        labs = std.get("laboratories", [])
+        if labs:
+            for lab in labs:
+                lab_id = lab.get("lab_id", "")
+                lab_name = lab.get("name", "")
+                region = lab.get("region", "")
+                city = lab.get("city", "")
+                state = lab.get("state", "")
+                cat = lab.get("category", "")
+                stds = ", ".join(lab.get("primary_standards_tested", []))
+                lab_text = f"BIS Recognized Testing Laboratory: {lab_name} ({lab_id}). Region: {region}. Location: {city}, {state}. Category: {cat}. Primary Standards Tested: {stds}. Status: {lab.get('recognition_status', '')}."
+                chunks.append({
+                    "id": f"{std_id}-lab-{lab_id}",
+                    "text": lab_text,
+                    "metadata": {"standard_id": std_id, "standard_number": std_num, "title": lab_name, "type": "laboratory", "text": lab_text}
+                })
+
+        # Sections chunks
+        for i, sec in enumerate(std.get("sections", [])):
+            sec_num = sec.get("section_number", str(i + 1))
+            sec_title = sec.get("title", "")
+            sec_content = sec.get("content", "")
+            sec_text = f"Document: {std_num} Section {sec_num} ({sec_title}): {sec_content}"
+            chunks.append({
+                "id": f"{std_id}-sec-{sec_num}",
+                "text": sec_text,
+                "metadata": {"standard_id": std_id, "standard_number": std_num, "title": title, "type": "section", "section_number": sec_num, "text": sec_text}
+            })
+else:
+    logger.info("No JSON files found, using fallback sample standard.")
+    sample_standard = {
+        "id": "bis-standard-001",
+        "text": "BIS IS 732: Code of practice for electrical wiring installations. All internal electrical wiring must follow earthing and conductor protection protocols.",
+    }
+    chunks.append({
+        "id": sample_standard["id"],
+        "text": sample_standard["text"],
+        "metadata": {"text": sample_standard["text"]}
+    })
+
+# 4. Embed and Upsert Chunks to Pinecone
+def index_standards():
+    if not client or not index:
+        logger.warning("Pinecone or Gemini client not configured. Skipping indexing.")
+        return
+
+    logger.info(f"Generating embeddings for {len(chunks)} chunks...")
+    vectors_to_upsert = []
+    for chunk in chunks:
+        try:
+            response = client.models.embed_content(
+                model=EMBEDDING_MODEL,
+                contents=chunk["text"],
+                config=types.EmbedContentConfig(
+                    task_type="RETRIEVAL_DOCUMENT",
+                    output_dimensionality=EMBEDDING_DIMENSION,
+                ),
+            )
+            embedding = response.embeddings[0].values
+            vectors_to_upsert.append({
+                "id": chunk["id"],
+                "values": embedding,
+                "metadata": chunk["metadata"]
+            })
+        except Exception as e:
+            logger.error(f"Error embedding chunk {chunk['id']}: {e}")
+
+    # Batch upsert
+    batch_size = 100
+    for i in range(0, len(vectors_to_upsert), batch_size):
+        batch = vectors_to_upsert[i:i + batch_size]
+        index.upsert(vectors=batch)
+
+    logger.info(f"Successfully uploaded {len(vectors_to_upsert)} chunks to Pinecone!")
+
+# 5. Reusable Retrieval Function
+def query_standards(query_text: str, top_k: int = 2):
+    matches = []
+    
+    # Try Pinecone vector search first
+    if client and index:
+        try:
+            response = client.models.embed_content(
+                model=EMBEDDING_MODEL,
+                contents=query_text,
+                config=types.EmbedContentConfig(
+                    task_type="RETRIEVAL_QUERY",
+                    output_dimensionality=EMBEDDING_DIMENSION,
+                ),
+            )
+            query_vector = response.embeddings[0].values
+            results = index.query(vector=query_vector, top_k=top_k, include_metadata=True)
+            matches = results.get("matches", [])
+        except Exception as e:
+            logger.error(f"Error during Pinecone query '{query_text}': {e}")
+
+    # Robust local fallback search across loaded standard chunks if vector search returns no results
+    if not matches and chunks:
+        logger.info(f"Vector search returned no results. Performing local fallback search across {len(chunks)} chunks...")
+        query_words = [w.lower() for w in query_text.split() if len(w) > 2]
+        scored_chunks = []
+        for chunk in chunks:
+            text_lower = chunk["text"].lower()
+            match_count = sum(1 for word in query_words if word in text_lower)
+            if match_count > 0:
+                rel_score = min(0.98, round(0.60 + (match_count * 0.08), 2))
+                scored_chunks.append({
+                    "score": rel_score,
+                    "metadata": chunk["metadata"]
+                })
+        scored_chunks.sort(key=lambda x: x["score"], reverse=True)
+        matches = scored_chunks[:top_k]
+
+    return matches
+
+# Automatically run indexing when module is initialized if index is empty
+try:
+    if index_standards and client and index:
+        index_stats = index.describe_index_stats()
+        total_vectors = index_stats.get("total_vector_count", 0)
+        if total_vectors == 0:
+            logger.info("Pinecone index is empty. Automatically indexing BIS standards and schemes...")
+            index_standards()
+except Exception as idx_err:
+    logger.warning(f"Auto-indexing check skipped: {idx_err}")
+
+# 6. "Recommend Standards" Helper Function (For Member 4 - Compliance Checker)
+def recommend_standards_for_product(product_description: str, top_k: int = 3):
+    """
+    Given a product description (e.g. 'packaged drinking water', 'gold jewellery', 'lithium ion battery'),
+    retrieves matching BIS standards, certification schemes, and accredited testing laboratories using Gemini.
+    """
+    query = f"Applicable BIS Indian Standards, certification scheme rules, and testing requirements for {product_description}"
+    matches = query_standards(query, top_k=top_k)
+
+    recommended_standards = []
+    applicable_schemes = []
+    recommended_labs = []
+
+    for match in matches:
+        metadata = match.get("metadata", {})
+        score = round(match.get("score", 0.0), 4)
+        chunk_type = metadata.get("type", "")
+
+        item_info = {
+            "title": metadata.get("title") or metadata.get("standard_number"),
+            "standard_number": metadata.get("standard_number"),
+            "relevance_score": score,
+            "matched_excerpt": metadata.get("text", "")
+        }
+
+        if chunk_type == "laboratory":
+            recommended_labs.append(item_info)
+        elif "scheme" in str(metadata.get("standard_id", "")).lower() or "scheme" in str(metadata.get("title", "")).lower():
+            applicable_schemes.append(item_info)
+        else:
+            recommended_standards.append(item_info)
+
+    return {
+        "product_description": product_description,
+        "total_matches_found": len(matches),
+        "recommended_standards": recommended_standards,
+        "applicable_schemes": applicable_schemes,
+        "accredited_testing_labs": recommended_labs
+    }
+
+# Run test queries if executed directly
+if __name__ == "__main__":
+    # Index standards chunks into Pinecone vector database
+    index_standards()
+
+    test_queries = [
+        "What are the acceptable limits for pH and TDS in drinking water according to IS 10500?",
+        "What are the mandatory hallmarking purity grades and HUID rules for gold jewellery?",
+        "Which electronics require self-declaration of conformity under the BIS Compulsory Registration Scheme (CRS)?",
+        "Which BIS testing laboratories in Northern Region test drinking water and steel?"
+    ]
+
+    for q in test_queries:
+        print(f"\nRunning test query: '{q}'")
+        matches = query_standards(q, top_k=2)
+        print("--- Retrieved Matches ---")
+        for match in matches:
+            score = match.get('score', 0.0)
+            text = match.get('metadata', {}).get('text', '')
+            print(f"Score: {score:.4f}")
+            print(f"Content: {text}\n")
+
+    print("\n--- Testing Product Recommendation for Member 4 ---")
+    rec = recommend_standards_for_product("22K Gold Jewellery Ring")
+    print(json.dumps(rec, indent=2))

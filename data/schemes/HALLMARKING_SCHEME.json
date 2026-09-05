@@ -1,0 +1,135 @@
+{
+  "$schema": "../schema/standard_schema.json",
+  "standard_id": "SCHEME_HALLMARKING_2024",
+  "standard_number": "BIS Hallmarking Scheme",
+  "title": "BIS Hallmarking Scheme for Gold and Silver Precious Metal Jewellery",
+  "short_title": "BIS Hallmarking Scheme",
+  "edition": "Hallmarking Regulations 2018",
+  "year": 2024,
+  "reaffirmation_year": null,
+  "status": "Active",
+  "domain": "Precious Metals, Jewellery & Consumer Protection",
+  "category": "Purity Certification & Assaying",
+  "department": "Hallmarking Department (HM)",
+  "technical_committee": "BIS Precious Metals Sectional Committee (MTD 10)",
+  "ics_code": "39.060",
+  "scope": "This document prescribes the official requirements, purity grades, assaying methodology, registration rules for jewellers, and operating guidelines for Assaying and Hallmarking Centres (AHCs) operating under the BIS Hallmarking Regulations, 2018 and mandatory hallmarking orders for gold and silver jewellery.",
+  "description": "BIS Hallmarking is the official purity certification system for gold and silver jewellery sold in India. It guarantees that hallmarked items conform to national standards of fineness (e.g. 22K/916, 18K/750 for gold). Under the BIS Hallmarking Regulations 2018, mandatory hallmarking has been rolled out across over 350 notified districts in India. The cornerstone of the modern hallmarking framework is the 6-digit alphanumeric Hallmarking Unique ID (HUID), which is laser-engraved on every individual piece of jewellery alongside the BIS emblem and purity code. Assaying is carried out by BIS-recognized independent Assaying and Hallmarking Centres (AHCs) using referee fire assay testing procedures.",
+  "key_requirements": [
+    {
+      "parameter": "Mandatory Hallmarking Marks",
+      "requirement": "Every hallmarked gold article must feature three distinct laser markings: (1) BIS Logo, (2) Purity Grade & Caratage, and (3) 6-digit alphanumeric HUID code.",
+      "acceptable_limit": "All 3 symbols mandatory on every individual piece",
+      "permissible_limit": "Not applicable — partial hallmarking is strictly prohibited",
+      "unit": "Mark count",
+      "test_method": "Microscopic & Laser Inspection",
+      "clause_reference": "Hallmarking Regulations 2018, Regulation 3"
+    },
+    {
+      "parameter": "Recognized Gold Purity Standards",
+      "requirement": "Gold jewellery hallmarking is restricted to designated purity grades as per IS 1417.",
+      "acceptable_limit": "24K (995), 23K (958), 22K (916), 20K (833), 18K (750), 14K (585)",
+      "permissible_limit": "Purity tolerance strictly zero negative deviation",
+      "unit": "Fineness parts per thousand (ppt)",
+      "test_method": "Fire Assay (IS 1418) / XRF Screening",
+      "clause_reference": "IS 1417:2016, Table 1"
+    },
+    {
+      "parameter": "Recognized Silver Purity Standards",
+      "requirement": "Silver jewellery and artefacts hallmarking as per IS 2112.",
+      "acceptable_limit": "999 (Fine silver), 970, 925 (Sterling silver), 900, 835, 800",
+      "permissible_limit": "Purity tolerance strictly zero negative deviation",
+      "unit": "Fineness parts per thousand (ppt)",
+      "test_method": "Cupellation / Volumetric Method (IS 2113)",
+      "clause_reference": "IS 2112:2014, Table 1"
+    },
+    {
+      "parameter": "Assaying Method",
+      "requirement": "Determining gold purity in AHCs via fire assay (cupellation) as the official referee method.",
+      "acceptable_limit": "Fire Assay compliance as per IS 1418",
+      "permissible_limit": "X-Ray Fluorescence (XRF) permitted for non-destructive preliminary sorting only",
+      "unit": "Analytical method",
+      "test_method": "IS 1418 (Fire Assay)",
+      "clause_reference": "IS 1418:2016"
+    }
+  ],
+  "sections": [
+    {
+      "section_number": "1",
+      "title": "Legislative Authority & Mandatory Notified Districts",
+      "content": "Operates under Section 14 and Section 15 of the BIS Act, 2016. Mandatory hallmarking has been implemented in phases starting June 2021, covering gold jewellery items sold by registered jewellers across notified districts.",
+      "page_number": 1
+    },
+    {
+      "section_number": "2",
+      "title": "Jeweller Registration & Automatic Certification",
+      "content": "Any jeweller engaged in selling hallmarked gold/silver jewellery must obtain a BIS Hallmarking Registration Certificate online via Manakonline. Registration is granted automatically upon submitting business details. Micro-jewellers with turnover up to Rs 40 Lakhs are exempt from mandatory hallmarking but can register voluntarily.",
+      "page_number": 2
+    },
+    {
+      "section_number": "3",
+      "title": "Assaying & Hallmarking Centre (AHC) Recognition Scheme",
+      "content": "AHCs operate as independent testing bodies recognized by BIS under strict audit procedures. An AHC must have sampling tools, XRF analyzers, fire assay furnaces, balances sensitive to 0.01 mg, and laser marking machines connected to the central BIS HUID portal.",
+      "page_number": 3
+    },
+    {
+      "section_number": "4",
+      "title": "HUID (Hallmarking Unique ID) Architecture & Consumer Verification",
+      "content": "HUID is a unique 6-digit alphanumeric code generated by the BIS server when an AHC receives a batch from a registered jeweller. Once tested and hallmarked, the HUID is uploaded to the central database. Consumers can scan/type the HUID on the official 'BIS CARE' mobile app to view the jeweller registration name, AHC name, hallmarking date, article type, and certified purity.",
+      "page_number": 4
+    },
+    {
+      "section_number": "5",
+      "title": "Penalties for Adulteration & Non-Hallmarked Sales",
+      "content": "Selling unhallmarked gold jewellery in mandatory districts or selling under-karatage gold is an offense under Section 29 of the BIS Act, 2016 punishable with a fine up to 5 times the value of the article or imprisonment up to 1 year.",
+      "page_number": 5
+    }
+  ],
+  "applicable_products_or_industries": [
+    "Gold Jewellery & Ornaments (IS 1417, IS 1418)",
+    "Gold Coins & Bullion (IS 1417)",
+    "Silver Jewellery, Cutlery & Artefacts (IS 2112, IS 2113)",
+    "Assaying & Hallmarking Centres (AHC Network)",
+    "Retail & Wholesale Gems & Jewellery Sector"
+  ],
+  "keywords": [
+    "Hallmarking",
+    "HUID",
+    "Hallmarking Unique ID",
+    "Gold Purity",
+    "22K 916",
+    "18K 750",
+    "14K 585",
+    "Fire Assay",
+    "Assaying and Hallmarking Centre",
+    "AHC",
+    "BIS CARE App",
+    "IS 1417",
+    "IS 1418"
+  ],
+  "related_standards": [
+    {
+      "standard_number": "IS 1417",
+      "title": "Gold and Gold Alloys, Jewellery/Artefacts — Fineness and Marking",
+      "relationship": "normative_reference"
+    },
+    {
+      "standard_number": "IS 1418",
+      "title": "Assaying Gold in Gold Bullion, Gold Alloys and Gold Jewellery/Artefacts — Cupellation Method",
+      "relationship": "normative_reference"
+    }
+  ],
+  "source": "Bureau of Indian Standards — Hallmarking Department",
+  "source_url": "https://www.bis.gov.in/hallmarking-overview/",
+  "citation": {
+    "citation_text": "Bureau of Indian Standards (2018). BIS Hallmarking Regulations 2018 for Gold and Silver Jewellery. New Delhi: BIS.",
+    "standard": "BIS Hallmarking Scheme",
+    "year": 2024
+  },
+  "metadata": {
+    "mandatory_certification": true,
+    "quality_control_order": "Precious Metals Hallmarking Order 2021",
+    "last_amendment": "Mandatory Hallmarking Phase III (2023)",
+    "version_tag": "v1.0.0"
+  }
+}

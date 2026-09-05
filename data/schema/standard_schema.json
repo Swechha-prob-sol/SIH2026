@@ -1,0 +1,236 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BISStandardSchema",
+  "description": "Standardized JSON Schema for BIS (Bureau of Indian Standards) documents used in the BIS RAG Assistant and Compliance Checker.",
+  "type": "object",
+  "required": [
+    "standard_id",
+    "standard_number",
+    "title",
+    "edition",
+    "year",
+    "status",
+    "domain",
+    "category",
+    "scope",
+    "description",
+    "key_requirements",
+    "sections",
+    "keywords",
+    "applicable_products_or_industries",
+    "citation"
+  ],
+  "properties": {
+    "standard_id": {
+      "type": "string",
+      "description": "Unique identifier formatted as IS_NUMBER_YEAR, e.g. IS_10500_2012",
+      "pattern": "^IS_[0-9A-Z_]+_[0-9]{4}$"
+    },
+    "standard_number": {
+      "type": "string",
+      "description": "Official standard designation, e.g. IS 10500"
+    },
+    "title": {
+      "type": "string",
+      "description": "Full official title of the Indian Standard"
+    },
+    "short_title": {
+      "type": "string",
+      "description": "Short or colloquial title for UI display and compact summaries"
+    },
+    "edition": {
+      "type": "string",
+      "description": "Revision or edition status, e.g. Second Revision"
+    },
+    "year": {
+      "type": "integer",
+      "description": "Publication year"
+    },
+    "reaffirmation_year": {
+      "type": ["integer", "null"],
+      "description": "Most recent reaffirmation year by BIS sectional committee, if applicable"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["Active", "Superseded", "Withdrawn", "Under Revision"]
+    },
+    "domain": {
+      "type": "string",
+      "description": "Primary industry or technical domain (e.g. Food Safety & Water, Mechanical Engineering, Civil & Construction)"
+    },
+    "category": {
+      "type": "string",
+      "description": "Specific sub-category (e.g. Water Quality, Material Testing, Structural Steel)"
+    },
+    "department": {
+      "type": "string",
+      "description": "BIS Technical Division, e.g. Food and Agriculture Division (FAD), Mechanical Engineering Division (MED)"
+    },
+    "technical_committee": {
+      "type": "string",
+      "description": "BIS Sectional Committee ID and name, e.g. FAD 25 (Drinking Water)"
+    },
+    "ics_code": {
+      "type": "string",
+      "description": "International Classification for Standards (ICS) code, e.g. 13.060.20"
+    },
+    "scope": {
+      "type": "string",
+      "description": "Full verbatim or comprehensive scope defining what is covered and excluded"
+    },
+    "description": {
+      "type": "string",
+      "description": "Executive summary and technical purpose of the standard for RAG retrieval context"
+    },
+    "key_requirements": {
+      "type": "array",
+      "description": "Structured parameters and thresholds for automated compliance evaluation and table lookups",
+      "items": {
+        "type": "object",
+        "required": ["parameter", "requirement", "clause_reference"],
+        "properties": {
+          "parameter": {
+            "type": "string",
+            "description": "Specific physical, chemical, mechanical, or electrical characteristic"
+          },
+          "requirement": {
+            "type": "string",
+            "description": "Specification limit, test criteria, or descriptive rule"
+          },
+          "acceptable_limit": {
+            "type": ["string", "null"],
+            "description": "Baseline desirable or minimum acceptable value"
+          },
+          "permissible_limit": {
+            "type": ["string", "null"],
+            "description": "Maximum allowable limit under relaxation / alternative source conditions"
+          },
+          "unit": {
+            "type": ["string", "null"],
+            "description": "Unit of measurement (e.g. mg/l, MPa, mm, %)"
+          },
+          "test_method": {
+            "type": ["string", "null"],
+            "description": "Reference standard or test method clause (e.g. IS 3025 Part 11)"
+          },
+          "clause_reference": {
+            "type": "string",
+            "description": "Exact clause or table in the standard (e.g. Table 1, Clause 4.2)"
+          }
+        }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "description": "Ordered sections and clauses enabling precise chunking and cited section-level retrieval in RAG",
+      "items": {
+        "type": "object",
+        "required": ["section_number", "title", "content", "page_number"],
+        "properties": {
+          "section_number": {
+            "type": "string",
+            "description": "Section identifier, e.g. '1', '4.2', 'Table 1'"
+          },
+          "title": {
+            "type": "string",
+            "description": "Section heading title"
+          },
+          "content": {
+            "type": "string",
+            "description": "Detailed text content of the section/clause"
+          },
+          "page_number": {
+            "type": "integer",
+            "description": "Document page number for citation generation"
+          },
+          "subsections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["clause_number", "title", "content"],
+              "properties": {
+                "clause_number": { "type": "string" },
+                "title": { "type": "string" },
+                "content": { "type": "string" },
+                "page_number": { "type": "integer" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "applicable_products_or_industries": {
+      "type": "array",
+      "description": "List of industrial domains, commercial applications, or product types subject to this standard",
+      "items": { "type": "string" }
+    },
+    "keywords": {
+      "type": "array",
+      "description": "Search tags, synonyms, acronyms, and keywords for BM25 and hybrid search ranking",
+      "items": { "type": "string" }
+    },
+    "related_standards": {
+      "type": "array",
+      "description": "Normative references and related IS / ISO / IEC standards",
+      "items": {
+        "type": "object",
+        "required": ["standard_number", "title", "relationship"],
+        "properties": {
+          "standard_number": { "type": "string" },
+          "title": { "type": "string" },
+          "relationship": {
+            "type": "string",
+            "enum": ["normative_reference", "supersedes", "superseded_by", "equivalent_to", "related_test_method"]
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "string",
+      "description": "Publishing authority, e.g. Bureau of Indian Standards"
+    },
+    "source_url": {
+      "type": "string",
+      "description": "Official BIS URL or standard portal repository reference"
+    },
+    "citation": {
+      "type": "object",
+      "required": ["citation_text", "standard", "year"],
+      "properties": {
+        "citation_text": {
+          "type": "string",
+          "description": "Canonical academic/formal citation string"
+        },
+        "standard": {
+          "type": "string",
+          "description": "Standard code for citation metadata, e.g. IS 10500:2012"
+        },
+        "year": {
+          "type": "integer",
+          "description": "Standard year"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "mandatory_certification": {
+          "type": "boolean",
+          "description": "Indicates if compliance is legally mandated by a Quality Control Order (QCO)"
+        },
+        "quality_control_order": {
+          "type": ["string", "null"],
+          "description": "Name and date of applicable Government Quality Control Order"
+        },
+        "last_amendment": {
+          "type": ["string", "null"],
+          "description": "Latest amendment details incorporated"
+        },
+        "version_tag": {
+          "type": "string",
+          "description": "Version tag for vector DB ingestion pipeline"
+        }
+      }
+    }
+  }
+}

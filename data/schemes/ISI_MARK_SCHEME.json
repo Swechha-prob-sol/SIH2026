@@ -1,0 +1,136 @@
+{
+  "$schema": "../schema/standard_schema.json",
+  "standard_id": "SCHEME_ISI_MARK_2024",
+  "standard_number": "BIS Scheme I",
+  "title": "BIS Product Certification Scheme (ISI Mark Scheme — Scheme I)",
+  "short_title": "ISI Mark Product Certification Scheme",
+  "edition": "Conformity Assessment Regulations 2018",
+  "year": 2024,
+  "reaffirmation_year": null,
+  "status": "Active",
+  "domain": "Product Certification & Conformity Assessment",
+  "category": "Mandatory & Voluntary Product Certification",
+  "department": "Certification Marks Department (CMD)",
+  "technical_committee": "BIS Conformity Assessment Committee",
+  "ics_code": "03.120.20",
+  "scope": "This document outlines the operational guidelines, regulatory framework, eligibility criteria, factory audit protocols, and licensing procedures for the grant and operation of BIS Product Certification Licenses under Scheme I (ISI Mark Scheme) pursuant to the Bureau of Indian Standards Act, 2016 and BIS (Conformity Assessment) Regulations, 2018.",
+  "description": "The ISI Mark Scheme (Scheme I) is the flagship product certification scheme operated by BIS since 1955. It enables manufacturers to use the iconic ISI Standard Mark on products that comply with relevant Indian Standards (IS). While voluntary for most products, compliance is legally mandatory for over 600 product categories governed by Quality Control Orders (QCOs) issued by various Ministries of the Government of India, including drinking water, structural steel, electrical appliances, cement, automotive tyres, and toys. The scheme requires in-house quality control testing facilities, adherence to a BIS-approved Scheme of Inspection and Testing (SIT), factory surveillance, and market sample verification.",
+  "key_requirements": [
+    {
+      "parameter": "In-House Testing Laboratory",
+      "requirement": "The manufacturing facility must possess a fully functional, calibrated testing laboratory equipped to conduct all routine and acceptance tests specified in the relevant Indian Standard.",
+      "acceptable_limit": "Complete compliance with BIS Scheme of Inspection and Testing (SIT)",
+      "permissible_limit": "No relaxation for essential safety and quality parameters",
+      "unit": "Compliance status",
+      "test_method": "BIS Scheme of Inspection & Testing (SIT)",
+      "clause_reference": "Regulation 4, Schedule II, Scheme I"
+    },
+    {
+      "parameter": "Quality Assurance Personnel",
+      "requirement": "Appointment of qualified technical quality control personnel responsible for executing raw material inspection, stage-wise manufacturing checks, and final batch release testing.",
+      "acceptable_limit": "Minimum 1 qualified Quality Assurance Manager per plant",
+      "permissible_limit": "Not applicable",
+      "unit": "Personnel count",
+      "test_method": "Factory Inspection Audit",
+      "clause_reference": "Scheme I, Clause 3.2"
+    },
+    {
+      "parameter": "Factory Audit & Sample Drawing",
+      "requirement": "Verification of manufacturing infrastructure, production capacity, calibration records, and drawing of independent verification samples during preliminary and surveillance audits.",
+      "acceptable_limit": "Pass independent testing in BIS Central/Recognized Laboratory",
+      "permissible_limit": "Re-testing permitted once under strict batch isolation protocols",
+      "unit": "Audit score",
+      "test_method": "BIS Factory Inspection Guidelines",
+      "clause_reference": "Regulation 5, Clause 4.1"
+    },
+    {
+      "parameter": "Marking Fee & License Validity",
+      "requirement": "Payment of annual marking fees based on production volume and maintenance of license validity through timely renewal applications.",
+      "acceptable_limit": "Initial validity 1 to 2 years; renewable up to 5 years",
+      "permissible_limit": "Grace period of 90 days for renewal with late fee",
+      "unit": "Years",
+      "test_method": "Administrative Compliance",
+      "clause_reference": "Schedule III, Marking Fee Structure"
+    }
+  ],
+  "sections": [
+    {
+      "section_number": "1",
+      "title": "Regulatory Framework & Legislative Authority",
+      "content": "The BIS Product Certification Scheme operates under Section 13 of the BIS Act, 2016 and the Bureau of Indian Standards (Conformity Assessment) Regulations, 2018. Under Scheme I, BIS grants a license to a manufacturer to use the Standard Mark (ISI Mark) on products that consistently conform to specified Indian Standards. Foreign manufacturers are covered under the Foreign Manufacturers Certification Scheme (FMCS) governed by the same technical rules.",
+      "page_number": 1
+    },
+    {
+      "section_number": "2",
+      "title": "Application & Pre-Prerequisite Documentation",
+      "content": "Manufacturers must submit Form I online via the Manakonline portal accompanied by factory location maps, list of manufacturing machinery, calibration certificates of testing equipment, raw material test certificates, plant layout, and details of qualified quality control personnel. Foreign manufacturers must additionally appoint an Authorized Indian Representative (AIR).",
+      "page_number": 2
+    },
+    {
+      "section_number": "3",
+      "title": "Preliminary Factory Audit & Verification Testing",
+      "content": "Upon initial review, a BIS Inspecting Officer conducts an on-site factory audit to inspect the manufacturing process, verify quality management systems, check testing equipment calibration, and draw verification samples. Samples are sealed and dispatched to a BIS-recognized laboratory for independent testing. If the test report is conforming and factory audit satisfactory, the license is granted.",
+      "page_number": 3
+    },
+    {
+      "section_number": "4",
+      "title": "Quality Control Orders (QCO) & Mandatory Certification",
+      "content": "While the scheme is generally voluntary, the Central Government mandates ISI marking through Quality Control Orders (QCOs) issued under Section 16 of the BIS Act, 2016 for products impacting public health, safety, environment, or national security. No person shall manufacture, import, distribute, or sell any product covered under a QCO without a valid BIS license and ISI Mark.",
+      "page_number": 4
+    },
+    {
+      "section_number": "5",
+      "title": "Surveillance, Market Sampling & Enforcement",
+      "content": "BIS maintains continuous quality vigilance through unannounced factory surveillance audits and market sample pickups from retail/wholesale channels. Samples are tested in independent labs. If non-conformities are detected, BIS may issue stop-marking orders, suspend or cancel the license, and initiate criminal prosecution under Section 29 of the BIS Act, 2016 with penalties up to Rs 2 Lakhs or imprisonment up to 2 years.",
+      "page_number": 5
+    }
+  ],
+  "applicable_products_or_industries": [
+    "Packaged Drinking Water & Mineral Water (IS 14543, IS 10500)",
+    "Structural & Reinforcement Steel (IS 1786, IS 2062)",
+    "Cement & Building Materials (IS 1489, IS 8112, IS 456)",
+    "Electrical Wires, Cables & Appliances (IS 694, IS 302)",
+    "Toys & Children Products (IS 9873, IS 15644)",
+    "Automotive Tyres & Safety Glass (IS 15633, IS 2553)",
+    "Chemicals, Fertilizers & Gas Cylinders (IS 3196, IS 7285)"
+  ],
+  "keywords": [
+    "ISI Mark",
+    "Product Certification Scheme",
+    "Scheme I",
+    "BIS License",
+    "Quality Control Order",
+    "QCO",
+    "Factory Audit",
+    "Scheme of Inspection and Testing",
+    "SIT",
+    "FMCS",
+    "Manakonline",
+    "Conformity Assessment"
+  ],
+  "related_standards": [
+    {
+      "standard_number": "IS 10500",
+      "title": "Drinking Water Specification",
+      "relationship": "normative_reference"
+    },
+    {
+      "standard_number": "IS 1786",
+      "title": "High Strength Deformed Steel Bars",
+      "relationship": "normative_reference"
+    }
+  ],
+  "source": "Bureau of Indian Standards — Certification Marks Department",
+  "source_url": "https://www.bis.gov.in/product-certification/",
+  "citation": {
+    "citation_text": "Bureau of Indian Standards (2018). BIS Product Certification Scheme (Scheme I) under BIS Conformity Assessment Regulations 2018. New Delhi: BIS.",
+    "standard": "BIS Scheme I",
+    "year": 2024
+  },
+  "metadata": {
+    "mandatory_certification": true,
+    "quality_control_order": "BIS (Conformity Assessment) Regulations, 2018 and relevant product QCOs",
+    "last_amendment": "Amendment 2024 (Digital Manakonline Automation)",
+    "version_tag": "v1.0.0"
+  }
+}
