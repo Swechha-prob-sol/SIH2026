@@ -1,0 +1,294 @@
+{
+  "$schema": "../schema/standard_schema.json",
+  "standard_id": "BIS_RECOGNIZED_LABS_2024",
+  "standard_number": "BIS Lab Directory",
+  "title": "Directory of BIS Central, Regional, and Recognized External Testing Laboratories",
+  "short_title": "BIS Recognized Testing Labs List",
+  "edition": "Laboratory Services Directory 2024",
+  "year": 2024,
+  "reaffirmation_year": null,
+  "status": "Active",
+  "domain": "Testing, Calibration & Laboratory Services",
+  "category": "BIS Recognized Laboratory Network",
+  "department": "Laboratory Services Department (LSD)",
+  "technical_committee": "BIS Laboratory Recognition Committee",
+  "ics_code": "03.120.20",
+  "scope": "This document contains the official structured list of 15 BIS Central, Regional, and Recognized Independent Testing Laboratories across India operating under the BIS Laboratory Recognition Scheme (LRS) to perform conformity testing for ISI Marking (Scheme I) and Compulsory Registration (Scheme II — CRS).",
+  "description": "BIS operates a robust network of internal central/regional laboratories alongside external third-party testing laboratories recognized under the BIS Laboratory Recognition Scheme (LRS) 2020. To obtain BIS recognition, external labs must hold valid NABL accreditation under ISO/IEC 17025 in relevant technical disciplines (Chemical, Mechanical, Electrical, Civil, Electronics, Microbiological) and pass mandatory proficiency testing (PT). This directory lists 15 key recognized testing facilities across India with details on region, location, primary category, and primary standards tested.",
+  "laboratories": [
+    {
+      "lab_id": "BIS-LAB-001",
+      "name": "BIS Central Laboratory, Sahibabad",
+      "type": "BIS Owned Central Lab",
+      "region": "Northern Region",
+      "city": "Ghaziabad",
+      "state": "Uttar Pradesh",
+      "address": "Plot No. 20/9, Site IV, Sahibabad Industrial Area, Ghaziabad - 201010",
+      "category": "Multidisciplinary (Chemical, Electrical, Mechanical, Civil, Food)",
+      "primary_standards_tested": ["IS 10500 (Water)", "IS 1786 (Steel)", "IS 694 (Cables)", "IS 1489 (Cement)", "IS 9873 (Toys)"],
+      "recognition_status": "BIS Central Reference Lab",
+      "nabl_accreditation": "TC-5001 (ISO/IEC 17025)"
+    },
+    {
+      "lab_id": "BIS-LAB-002",
+      "name": "BIS Western Regional Office Laboratory",
+      "type": "BIS Owned Regional Lab",
+      "region": "Western Region",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "address": "Manakalaya, E9, MIDC, Behind Marol Telephone Exchange, Andheri (East), Mumbai - 400093",
+      "category": "Electronics, Consumer Durables, Plastics & Chemical Testing",
+      "primary_standards_tested": ["IS 302 (Electrical Safety)", "IS 4984 (HDPE Pipes)", "IS 14543 (Packaged Water)"],
+      "recognition_status": "BIS Regional Lab",
+      "nabl_accreditation": "TC-5002 (ISO/IEC 17025)"
+    },
+    {
+      "lab_id": "BIS-LAB-003",
+      "name": "BIS Southern Regional Office Laboratory",
+      "type": "BIS Owned Regional Lab",
+      "region": "Southern Region",
+      "city": "Chennai",
+      "state": "Tamil Nadu",
+      "address": "CIT Campus, IV Cross Road, Taramani, Chennai - 600113",
+      "category": "Textiles, Water Quality, Cables & Electro-technical",
+      "primary_standards_tested": ["IS 10500 (Drinking Water)", "IS 1554 (Power Cables)", "IS 15633 (Tyres)"],
+      "recognition_status": "BIS Regional Lab",
+      "nabl_accreditation": "TC-5003 (ISO/IEC 17025)"
+    },
+    {
+      "lab_id": "BIS-LAB-004",
+      "name": "BIS Eastern Regional Office Laboratory",
+      "type": "BIS Owned Regional Lab",
+      "region": "Eastern Region",
+      "city": "Kolkata",
+      "state": "West Bengal",
+      "address": "1/14 CIT Scheme VII M, VIP Road, Kankurgachi, Kolkata - 700054",
+      "category": "Metallurgy, Structural Steel, Food & Agriculture Products",
+      "primary_standards_tested": ["IS 2062 (Structural Steel)", "IS 1875 (Carbon Steel)", "IS 1165 (Milk Powder)"],
+      "recognition_status": "BIS Regional Lab",
+      "nabl_accreditation": "TC-5004 (ISO/IEC 17025)"
+    },
+    {
+      "lab_id": "BIS-LAB-005",
+      "name": "BIS Northern Regional Office Laboratory",
+      "type": "BIS Owned Regional Lab",
+      "region": "Northern Region",
+      "city": "Mohali",
+      "state": "Punjab",
+      "address": "Plot No. E-41, Phase VIII-A, Industrial Area, Sector 75, Mohali - 160071",
+      "category": "Building Materials, Concrete, Agricultural Pumps & Motors",
+      "primary_standards_tested": ["IS 456 (Concrete)", "IS 8034 (Submersible Pumpsets)", "IS 1599 (Bend Test)"],
+      "recognition_status": "BIS Regional Lab",
+      "nabl_accreditation": "TC-5005 (ISO/IEC 17025)"
+    },
+    {
+      "lab_id": "BIS-LAB-006",
+      "name": "National Test House (NTH), Kolkata",
+      "type": "Government Recognized Test House",
+      "region": "Eastern Region",
+      "city": "Kolkata",
+      "state": "West Bengal",
+      "address": "11/1 Judge's Court Road, Alipore, Kolkata - 700027",
+      "category": "Heavy Machinery, Mechanical, Civil & Non-Destructive Testing",
+      "primary_standards_tested": ["IS 1786 (Rebar)", "IS 2062 (Steel)", "IS 1239 (Steel Pipes)", "IS 456 (Concrete)"],
+      "recognition_status": "BIS Recognized External Lab",
+      "nabl_accreditation": "TC-5120 (ISO/IEC 17025)"
+    },
+    {
+      "lab_id": "BIS-LAB-007",
+      "name": "ETDC — Electronics Test & Development Centre, Bengaluru",
+      "type": "STQC Government Laboratory",
+      "region": "Southern Region",
+      "city": "Bengaluru",
+      "state": "Karnataka",
+      "address": "STQC Complex, 100 Feet Road, Peenya Industrial Area 1st Stage, Bengaluru - 560058",
+      "category": "CRS Electronics, IT Equipment & Environmental Safety",
+      "primary_standards_tested": ["IS 13252 (IT Safety)", "IS 62368 (AV/IT Safety)", "IS 16046 (Li-ion Batteries)"],
+      "recognition_status": "BIS Recognized External Lab (CRS Authorized)",
+      "nabl_accreditation": "TC-5210 (ISO/IEC 17025)"
+    },
+    {
+      "lab_id": "BIS-LAB-008",
+      "name": "ERTL (East) — Electronics Regional Test Laboratory",
+      "type": "STQC Government Laboratory",
+      "region": "Eastern Region",
+      "city": "Kolkata",
+      "state": "West Bengal",
+      "address": "DN Block, Sector V, Salt Lake City, Kolkata - 700091",
+      "category": "IT Goods, LED Luminaires, Power Electronics (CRS)",
+      "primary_standards_tested": ["IS 13252 (IT Safety)", "IS 61347 (LED Drivers)", "IS 16102 (LED Bulbs)"],
+      "recognition_status": "BIS Recognized External Lab (CRS Authorized)",
+      "nabl_accreditation": "TC-5215 (ISO/IEC 17025)"
+    },
+    {
+      "lab_id": "BIS-LAB-009",
+      "name": "Shriram Institute for Industrial Research",
+      "type": "Autonomous Research Foundation",
+      "region": "Northern Region",
+      "city": "Delhi",
+      "state": "Delhi",
+      "address": "19 University Road, Delhi - 110007",
+      "category": "Chemical, Water Quality, Polymer & Environmental Testing",
+      "primary_standards_tested": ["IS 10500 (Water)", "IS 14543 (Mineral Water)", "IS 4984 (Plastics)", "IS 9873 (Toys)"],
+      "recognition_status": "BIS Recognized External Lab",
+      "nabl_accreditation": "TC-5301 (ISO/IEC 17025)"
+    },
+    {
+      "lab_id": "BIS-LAB-010",
+      "name": "Spectro Analytical Labs Limited",
+      "type": "Private Commercial Test Lab",
+      "region": "Northern Region",
+      "city": "Greater Noida",
+      "state": "Uttar Pradesh",
+      "address": "E-41, Okhla Industrial Area Phase II / Greater Noida Facility, UP - 201308",
+      "category": "Mechanical, Chemical, Metallurgy & Civil Testing",
+      "primary_standards_tested": ["IS 1786 (Steel)", "IS 1875 (Forging Steel)", "IS 1599 (Bend Test)", "IS 2062 (Steel)"],
+      "recognition_status": "BIS Recognized External Lab",
+      "nabl_accreditation": "TC-5350 (ISO/IEC 17025)"
+    },
+    {
+      "lab_id": "BIS-LAB-011",
+      "name": "TUV Rheinland India Private Limited Testing Lab",
+      "type": "Private Global Certification Lab",
+      "region": "Southern Region",
+      "city": "Bengaluru",
+      "state": "Karnataka",
+      "address": "Plot No. 27/B, Electronic City Phase 1, Hosur Road, Bengaluru - 560100",
+      "category": "Electronics CRS Safety, Photovoltaics & Medical Devices",
+      "primary_standards_tested": ["IS 13252 (IT Safety)", "IS 16294 (Solar PV)", "IS 62368 (Audio/Video Equipment)"],
+      "recognition_status": "BIS Recognized External Lab (CRS Authorized)",
+      "nabl_accreditation": "TC-5400 (ISO/IEC 17025)"
+    },
+    {
+      "lab_id": "BIS-LAB-012",
+      "name": "Intertek India Private Limited Laboratory",
+      "type": "Private Commercial Test Lab",
+      "region": "Northern Region",
+      "city": "Gurugram",
+      "state": "Haryana",
+      "address": "Plot No. 290, Udyog Vihar Phase II, Gurugram - 122016",
+      "category": "Toys, Textiles, Household Electrical Appliances & CRS",
+      "primary_standards_tested": ["IS 9873 (Toy Safety)", "IS 302 (Appliance Safety)", "IS 694 (PVC Cables)"],
+      "recognition_status": "BIS Recognized External Lab",
+      "nabl_accreditation": "TC-5420 (ISO/IEC 17025)"
+    },
+    {
+      "lab_id": "BIS-LAB-013",
+      "name": "UL India Private Limited Laboratory",
+      "type": "Private Safety Certification Lab",
+      "region": "Southern Region",
+      "city": "Bengaluru",
+      "state": "Karnataka",
+      "address": "Kalyani Platina Campus, 3rd Floor, Block I, Whitefield, Bengaluru - 560066",
+      "category": "Electrical Safety, Batteries, Power Electronics & CRS",
+      "primary_standards_tested": ["IS 16046 (Batteries)", "IS 13252 (IT Goods)", "IS 61000 (EMC Testing)"],
+      "recognition_status": "BIS Recognized External Lab (CRS Authorized)",
+      "nabl_accreditation": "TC-5450 (ISO/IEC 17025)"
+    },
+    {
+      "lab_id": "BIS-LAB-014",
+      "name": "SGS India Private Limited Laboratory",
+      "type": "Private Global Inspection & Testing Lab",
+      "region": "Northern Region",
+      "city": "Manesar",
+      "state": "Haryana",
+      "address": "Plot No. 28, Sector 18, IAE Manesar, Gurugram - 122050",
+      "category": "Food Safety, Agricultural Products, Water & Chemicals",
+      "primary_standards_tested": ["IS 10500 (Water)", "IS 14543 (Packaged Water)", "IS 1165 (Dairy Products)"],
+      "recognition_status": "BIS Recognized External Lab",
+      "nabl_accreditation": "TC-5480 (ISO/IEC 17025)"
+    },
+    {
+      "lab_id": "BIS-LAB-015",
+      "name": "CIPET: CSTS — Centre for Skilling and Technical Support",
+      "type": "Government Autonomous Institute",
+      "region": "Western Region",
+      "city": "Ahmedabad",
+      "state": "Gujarat",
+      "address": "Plot No. 630, Phase IV, GIDC Industrial Estate, Vatva, Ahmedabad - 382445",
+      "category": "Plastics Engineering, Polymer Testing, Pipes & Packaging",
+      "primary_standards_tested": ["IS 4984 (HDPE Pipes)", "IS 12231 (PVC Pipes)", "IS 14543 (Plastic Containers)"],
+      "recognition_status": "BIS Recognized External Lab",
+      "nabl_accreditation": "TC-5500 (ISO/IEC 17025)"
+    }
+  ],
+  "key_requirements": [
+    {
+      "parameter": "NABL Accreditation Prerequisite",
+      "requirement": "Laboratory must hold valid NABL accreditation as per ISO/IEC 17025 for the specific Indian Standards applied for.",
+      "acceptable_limit": "Valid ISO/IEC 17025 accreditation certificate",
+      "permissible_limit": "Not applicable",
+      "unit": "Accreditation status",
+      "test_method": "ISO/IEC 17025 Audit",
+      "clause_reference": "LRS Scheme Guidelines 2020, Clause 3.1"
+    },
+    {
+      "parameter": "Proficiency Testing (PT) Performance",
+      "requirement": "Mandatory satisfactory participation in Inter-Laboratory Comparison (ILC) / PT programs organized by BIS or NABL.",
+      "acceptable_limit": "|Z-score| <= 2.0",
+      "permissible_limit": "2.0 < |Z-score| < 3.0 requires corrective action within 30 days",
+      "unit": "Z-score metric",
+      "test_method": "ISO/IEC 17043 PT Scheme",
+      "clause_reference": "LRS Guidelines, Clause 5.4"
+    }
+  ],
+  "sections": [
+    {
+      "section_number": "1",
+      "title": "Laboratory Recognition Scheme (LRS) 2020 Framework",
+      "content": "BIS grants recognition to outside laboratories under Section 13 of the BIS Act 2016 and LRS Guidelines 2020 to augment testing capacity for Product Certification (ISI Mark) and Compulsory Registration (CRS). Recognized labs perform initial sample testing, surveillance sample testing, and referee testing.",
+      "page_number": 1
+    },
+    {
+      "section_number": "2",
+      "title": "Recognition Criteria & Discipline Scope",
+      "content": "Labs are evaluated based on testing equipment, calibration traceability, technical competence of personnel, environmental controls, and sample security. Recognition is granted for specific Indian Standards for 3 years, renewable upon audit.",
+      "page_number": 2
+    }
+  ],
+  "applicable_products_or_industries": [
+    "Water & Food Safety Testing (IS 10500, IS 14543)",
+    "Steel & Construction Testing (IS 1786, IS 2062, IS 456)",
+    "Electronics & CRS Testing (IS 13252, IS 16046, IS 62368)",
+    "Toys & Consumer Product Testing (IS 9873)",
+    "Plastics, Polymers & Pipes (IS 4984)"
+  ],
+  "keywords": [
+    "BIS Recognized Labs",
+    "Laboratory Recognition Scheme",
+    "LRS",
+    "ISO IEC 17025",
+    "NABL Accreditation",
+    "Central Laboratory Sahibabad",
+    "NTH Alipore",
+    "ETDC Bengaluru",
+    "ERTL Kolkata",
+    "Shriram Institute",
+    "Spectro",
+    "TUV Rheinland",
+    "Intertek",
+    "UL India",
+    "SGS India",
+    "CIPET"
+  ],
+  "related_standards": [
+    {
+      "standard_number": "ISO/IEC 17025",
+      "title": "General requirements for the competence of testing and calibration laboratories",
+      "relationship": "normative_reference"
+    }
+  ],
+  "source": "Bureau of Indian Standards — Laboratory Services Department (LSD)",
+  "source_url": "https://www.bis.gov.in/laboratory-services/laboratory-recognition-scheme-lrs/",
+  "citation": {
+    "citation_text": "Bureau of Indian Standards (2024). BIS Laboratory Recognition Scheme Directory 2024. New Delhi: BIS.",
+    "standard": "BIS Lab Directory",
+    "year": 2024
+  },
+  "metadata": {
+    "mandatory_certification": false,
+    "quality_control_order": "BIS Laboratory Recognition Scheme Rules 2020",
+    "last_amendment": "Directory Update August 2024",
+    "version_tag": "v1.0.0"
+  }
+}

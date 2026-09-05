@@ -1,0 +1,136 @@
+{
+  "$schema": "../schema/standard_schema.json",
+  "standard_id": "SCHEME_CRS_2024",
+  "standard_number": "BIS Scheme II",
+  "title": "BIS Compulsory Registration Scheme (CRS — Scheme II for Electronics and IT Goods)",
+  "short_title": "Compulsory Registration Scheme (CRS)",
+  "edition": "Conformity Assessment Regulations 2018",
+  "year": 2024,
+  "reaffirmation_year": null,
+  "status": "Active",
+  "domain": "Electronics, Information Technology & Consumer Safety",
+  "category": "Self-Declaration of Conformity (SDOC)",
+  "department": "Registration Department (CRS Division)",
+  "technical_committee": "BIS Electronics & Information Technology Division (LITD)",
+  "ics_code": "35.020",
+  "scope": "This document specifies the rules, testing guidelines, self-declaration protocols, and registration procedures under BIS Scheme II (Compulsory Registration Scheme — CRS) for electronic goods, IT hardware, solar photovoltaics, and low-voltage consumer electronics notified by MeitY, Ministry of Power, and MNRE.",
+  "description": "The Compulsory Registration Scheme (CRS) was launched in 2012 by the Ministry of Electronics and Information Technology (MeitY) in partnership with BIS to regulate imports and domestic manufacturing of electronic goods. Unlike the traditional ISI Mark scheme which requires factory audits, CRS operates on a Self-Declaration of Conformity (SDOC) model. Manufacturers must get their product samples tested in a BIS-recognized laboratory in India as per applicable Indian Standards (e.g. IS 13252 for IT equipment safety, IS 61347 for LED drivers, IS 16046 for Lithium batteries). Upon submitting a valid test report within 90 days, BIS issues a unique Registration Number (R-number) allowing the product to display the official CRS logo and registration statement.",
+  "key_requirements": [
+    {
+      "parameter": "BIS-Recognized Laboratory Test Report",
+      "requirement": "Product samples must be tested strictly in a BIS-recognized laboratory located within India as per the designated Indian Safety / Performance Standard.",
+      "acceptable_limit": "Complete test report with zero critical safety failures",
+      "permissible_limit": "Test report validity strictly within 90 days of issue for registration filing",
+      "unit": "Days",
+      "test_method": "Relevant IS Standard (e.g. IS 13252 Part 1, IS 16046 Part 2)",
+      "clause_reference": "CRS Scheme Rules, Clause 4.1"
+    },
+    {
+      "parameter": "Standard Mark & Labeling Format",
+      "requirement": "The registered product, packaging, and manual must display the official CRS logo along with the Indian Standard number and assigned Registration Number (R-XXXXXXXX).",
+      "acceptable_limit": "Display format: 'Self Declaration — Conforming to IS XXXXX:YEAR, R-XXXXXXXX'",
+      "permissible_limit": "E-labeling permitted for products with integrated display screens",
+      "unit": "Format compliance",
+      "test_method": "Visual Label Inspection",
+      "clause_reference": "BIS Guidelines for CRS Standard Mark Marking"
+    },
+    {
+      "parameter": "Authorized Indian Representative (AIR)",
+      "requirement": "Foreign manufacturers lacking a physical office in India must appoint a local entity as Authorized Indian Representative (AIR) who assumes legal liability.",
+      "acceptable_limit": "Registered Indian corporate entity with valid GSTIN and Power of Attorney",
+      "permissible_limit": "Not applicable",
+      "unit": "Legal entity status",
+      "test_method": "Legal & Corporate Verification",
+      "clause_reference": "CRS Guidelines for Foreign Manufacturers, Section 3"
+    },
+    {
+      "parameter": "Registration Validity & Renewal",
+      "requirement": "Initial registration grant is valid for 2 years and can be renewed for up to 5 years provided no design or safety component changes have occurred.",
+      "acceptable_limit": "2 to 5 years validity upon submission of Undertaking of No Change",
+      "permissible_limit": "Renewal application accepted up to 90 days prior to expiry date",
+      "unit": "Years",
+      "test_method": "Administrative Declaration",
+      "clause_reference": "Scheme II, Schedule II"
+    }
+  ],
+  "sections": [
+    {
+      "section_number": "1",
+      "title": "Background & Notified Product Categories",
+      "content": "CRS covers over 64 product categories notified under Quality Control Orders issued by MeitY, Ministry of Power (BEE), and MNRE. Key categories include laptops, tablets, mobile phones, smart watches, LED TVs, power adapters, power banks, uninterruptible power supplies (UPS), Bluetooth speakers, solar PV modules, and secondary lithium batteries.",
+      "page_number": 1
+    },
+    {
+      "section_number": "2",
+      "title": "Self-Declaration of Conformity (SDOC) Process",
+      "content": "The manufacturer generates sample units, sends them to a BIS-recognized testing laboratory in India, receives an official test report conforming to the relevant IS safety standard, and submits an online application on the BIS CRS portal within 90 days of test report issuance.",
+      "page_number": 2
+    },
+    {
+      "section_number": "3",
+      "title": "Testing Parameters & Standard References",
+      "content": "Testing evaluates electrical shock hazard, heating & thermal insulation, mechanical strength, fire resistance, radiation safety, and battery short-circuit safety. Primary reference standards include IS 13252 / IS 62368 (IT Equipment Safety), IS 302 (Household Appliances), IS 16046 (Rechargeable Batteries), and IS 61347 (Lamp Controlgear).",
+      "page_number": 3
+    },
+    {
+      "section_number": "4",
+      "title": "CRS Labeling & E-Labeling Rules",
+      "content": "Products must carry the CRS mark with standard wording. Height of the logo must be at least 3 mm or 1/4th of the brand logo height. E-labeling is allowed on smart displays (phones, laptops) provided access instructions are included in the user packaging.",
+      "page_number": 4
+    },
+    {
+      "section_number": "5",
+      "title": "Surveillance & Non-Conformity Consequences",
+      "content": "MeitY and BIS execute periodic market surveillance by purchasing off-the-shelf samples from retail outlets or e-commerce platforms. Samples are re-tested in designated labs. If a sample fails safety testing, the Registration Number is cancelled immediately, stock is recalled, and customs import blockades are initiated.",
+      "page_number": 5
+    }
+  ],
+  "applicable_products_or_industries": [
+    "Laptops, Desktops & Notebook Computers (IS 13252 Part 1 / IS 62368)",
+    "Mobile Phones & Smartwatches (IS 13252 Part 1 / IS 16046)",
+    "LED Luminaires, Drivers & Bulbs (IS 16102, IS 61347)",
+    "Lithium-ion Cells & Power Banks (IS 16046 Part 1 & 2)",
+    "Solar PV Inverters & Utility Controllers (IS 16294)",
+    "Smart TVs, Soundbars & Audio Systems (IS 616 / IS 62368)"
+  ],
+  "keywords": [
+    "Compulsory Registration Scheme",
+    "CRS",
+    "Scheme II",
+    "Self Declaration of Conformity",
+    "SDOC",
+    "MeitY",
+    "Registration Number",
+    "R-Number",
+    "Electronics Safety",
+    "IS 13252",
+    "IS 16046",
+    "IS 62368",
+    "AIR"
+  ],
+  "related_standards": [
+    {
+      "standard_number": "IS 13252",
+      "title": "Information Technology Equipment — Safety",
+      "relationship": "normative_reference"
+    },
+    {
+      "standard_number": "IS 16046",
+      "title": "Secondary Cells and Batteries Containing Alkaline or Other Non-Acid Electrolytes",
+      "relationship": "normative_reference"
+    }
+  ],
+  "source": "Bureau of Indian Standards — Registration Department (CRS)",
+  "source_url": "https://www.crsbis.in/BIS/",
+  "citation": {
+    "citation_text": "Bureau of Indian Standards (2018). Compulsory Registration Scheme (Scheme II) for Electronics and IT Goods. New Delhi: BIS.",
+    "standard": "BIS Scheme II",
+    "year": 2024
+  },
+  "metadata": {
+    "mandatory_certification": true,
+    "quality_control_order": "MeitY Electronics & Information Technology Goods (Requirement for Compulsory Registration) Order",
+    "last_amendment": "Phase V Notification 2023",
+    "version_tag": "v1.0.0"
+  }
+}
