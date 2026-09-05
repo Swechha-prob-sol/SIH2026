@@ -1,45 +1,69 @@
 import { useState } from "react";
+import axios from "axios";
 import SourceCard from "./SourceCard";
+
+const BACKEND_URL = "http://localhost:8000";
+
+type Source = { title: string; description: string };
+type Message = { role: "user" | "assistant"; content: string; sources?: Source[] };
 
 function ChatWindow() {
     const [message, setMessage] = useState("");
-
-    const [messages, setMessages] = useState<
-        { role: "user" | "assistant"; content: string }[]
-    >([]);
-
+    const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const trimmedMessage = message.trim();
-
         if (!trimmedMessage || isLoading) return;
 
-        setMessages((previousMessages) => [
-            ...previousMessages,
-            {
-                role: "user",
-                content: trimmedMessage,
-            },
-        ]);
-
+        setMessages((prev) => [...prev, { role: "user", content: trimmedMessage }]);
         setMessage("");
         setIsLoading(true);
 
-        setTimeout(() => {
-            setMessages((previousMessages) => [
-                ...previousMessages,
+        try {
+            const response = await axios.post(`${BACKEND_URL}/query`, {
+                query_text: trimmedMessage,
+                top_k: 3,
+            });
+
+            const results = response.data?.results ?? [];
+
+            // Build answer text from top result or fallback
+            const answerText =
+                results.length > 0
+                    ? results[0]?.text ||
+                      "BIS Assistant found relevant standards. See sources below."
+                    : "No matching BIS standards found for your query. Please try rephrasing.";
+
+            // Build source cards from all results
+            const sources: Source[] = results.map((r: { standard_number?: string; title?: string; text?: string }) => ({
+                title: r.standard_number
+                    ? `${r.standard_number} — ${r.title ?? ""}`
+                    : (r.title ?? "BIS Document"),
+                description: r.text
+                    ? r.text.slice(0, 160) + (r.text.length > 160 ? "..." : "")
+                    : "Retrieved from BIS knowledge base.",
+            }));
+
+            setMessages((prev) => [
+                ...prev,
+                { role: "assistant", content: answerText, sources },
+            ]);
+        } catch {
+            setMessages((prev) => [
+                ...prev,
                 {
                     role: "assistant",
                     content:
-                        "Your query has been received. BIS Assistant will process it.",
+                        "Unable to reach the BIS backend. Please ensure the backend server is running at http://localhost:8000.",
+                    sources: [],
                 },
             ]);
-
+        } finally {
             setIsLoading(false);
-        }, 1200);
+        }
     };
     return (
         <div className="flex h-full flex-col bg-[#f5f7fa]">
@@ -148,10 +172,20 @@ function ChatWindow() {
                                                 Sources
                                             </p>
 
-                                            <SourceCard
-                                                title="BIS document"
-                                                description="Retrieved source will appear here when the BIS knowledge system is connected."
-                                            />
+                                            {msg.sources && msg.sources.length > 0 ? (
+                                                msg.sources.map((src, i) => (
+                                                    <SourceCard
+                                                        key={i}
+                                                        title={src.title}
+                                                        description={src.description}
+                                                    />
+                                                ))
+                                            ) : (
+                                                <SourceCard
+                                                    title="BIS document"
+                                                    description="No sources retrieved."
+                                                />
+                                            )}
                                         </div>
                                     )}
                                 </div>
