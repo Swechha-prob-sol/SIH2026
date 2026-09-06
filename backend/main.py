@@ -5,13 +5,6 @@ from typing import List, Optional
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from backend.database import get_db
-from backend.models import Standard
-import json
-import hashlib
-from backend.redis_client import redis_client
-from backend.schemas import QueryRequest, QueryResponse, QueryMatch
-from rag_pipeline import query_standards, generate_answer
 
 from backend.compliance import (
     check_compliance,
@@ -32,7 +25,7 @@ from backend.schemas import (
     RecommendStandardsRequest,
     RecommendStandardsResponse,
 )
-from rag_pipeline import query_standards
+from rag_pipeline import query_standards, generate_answer
 
 app = FastAPI(
     title="BIS Standards AI Assistant API",
@@ -90,15 +83,6 @@ def get_standards(db: Session = Depends(get_db)):
             "description": item.get("description"),
             "mandatory_certification": item.get("mandatory_certification", False),
         }
-        for standard in standards
-    ]
-
-@app.post("/query", response_model=QueryResponse)
-def query_endpoint(request: QueryRequest):
-    cache_key = f"query:{hashlib.sha256(request.query_text.encode()).hexdigest()}:{request.top_k}"
-    cached_result = redis_client.get(cache_key)
-    if cached_result:
-        return QueryResponse(**json.loads(cached_result))
         for idx, item in enumerate(catalog)
     ]
 
@@ -110,7 +94,9 @@ def query_endpoint(request: QueryRequest):
     try:
         cached_result = redis_client.get(cache_key)
         if cached_result:
-            return QueryResponse(query=request.query_text, cached=True, results=json.loads(cached_result))
+            cached_data = json.loads(cached_result)
+            cached_data["cached"] = True
+            return QueryResponse(**cached_data)
     except Exception:
         pass
 
@@ -138,13 +124,6 @@ def query_endpoint(request: QueryRequest):
 
     redis_client.setex(cache_key, 3600, response.model_dump_json())
     return response
-    try:
-        redis_client.set(cache_key, json.dumps([r.model_dump() for r in results]), ex=3600)
-    except Exception:
-        pass
-
-
-    return QueryResponse(query=request.query_text, cached=False, results=results)
 
 
 # ---------------------------------------------------------

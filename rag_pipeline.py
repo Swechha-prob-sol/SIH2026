@@ -91,21 +91,28 @@ if json_files:
             "metadata": {"standard_id": std_id, "standard_number": std_num, "title": title, "type": "overview", "text": overview_text}
         })
 
-        # Key requirements chunk
+        # Key requirements — one chunk PER PARAMETER for precise retrieval
         reqs = std.get("key_requirements", [])
-        if reqs:
-            req_text_list = []
-            for req in reqs:
-                param = req.get("parameter", "")
-                acc = req.get("acceptable_limit", "")
-                perm = req.get("permissible_limit", "")
-                unit = req.get("unit", "")
-                req_text_list.append(f"{param}: Acceptable={acc} {unit}, Permissible={perm} {unit}. Requirement: {req.get('requirement', '')}")
-            req_chunk_text = f"Document: {std_num} Key Requirements:\n" + "\n".join(req_text_list)
+        for req_idx, req in enumerate(reqs):
+            param = req.get("parameter", "")
+            acc = req.get("acceptable_limit", "")
+            perm = req.get("permissible_limit", "")
+            unit = req.get("unit", "")
+            req_text = (
+                f"Document: {std_num} - {title}. "
+                f"Parameter: {param}. "
+                f"Acceptable Limit: {acc} {unit}. "
+                f"Permissible Limit (in absence of alternate source): {perm} {unit}. "
+                f"Requirement: {req.get('requirement', '')}. "
+                f"Test Method: {req.get('test_method', '')}. "
+                f"Clause: {req.get('clause_reference', '')}."
+            )
+            param_slug = param.lower().replace(" ", "_").replace("(", "").replace(")", "")
+            param_slug = "".join(c for c in param_slug if ord(c) < 128)[:40]
             chunks.append({
-                "id": f"{std_id}-requirements",
-                "text": req_chunk_text,
-                "metadata": {"standard_id": std_id, "standard_number": std_num, "title": title, "type": "key_requirements", "text": req_chunk_text}
+                "id": f"{std_id}-req-{param_slug}-{req_idx}",
+                "text": req_text,
+                "metadata": {"standard_id": std_id, "standard_number": std_num, "title": title, "type": "key_requirement", "parameter": param, "text": req_text}
             })
 
         # Laboratories chunk (if present)
@@ -149,37 +156,54 @@ else:
         "metadata": {"text": sample_standard["text"]}
     })
 
-# 4. Embed and Upsert Chunks to Pinecone
 def index_standards():
     if not client or not index:
         logger.warning("Pinecone or Gemini client not configured. Skipping indexing.")
         return
 
-    logger.info(f"Generating embeddings for {len(chunks)} chunks...")
+    import time
+    logger.info(f"Generating embeddings for {len(chunks)} chunks in batches...")
     vectors_to_upsert = []
-    for chunk in chunks:
-        try:
-            response = client.models.embed_content(
-                model=EMBEDDING_MODEL,
-                contents=chunk["text"],
-                config=types.EmbedContentConfig(
-                    task_type="RETRIEVAL_DOCUMENT",
-                    output_dimensionality=EMBEDDING_DIMENSION,
-                ),
-            )
-            embedding = response.embeddings[0].values
-            vectors_to_upsert.append({
-                "id": chunk["id"],
-                "values": embedding,
-                "metadata": chunk["metadata"]
-            })
-        except Exception as e:
-            logger.error(f"Error embedding chunk {chunk['id']}: {e}")
+    batch_size = 20
 
-    # Batch upsert
-    batch_size = 100
-    for i in range(0, len(vectors_to_upsert), batch_size):
-        batch = vectors_to_upsert[i:i + batch_size]
+    for i in range(0, len(chunks), batch_size):
+        chunk_batch = chunks[i:i + batch_size]
+        texts = [c["text"] for c in chunk_batch]
+        max_retries = 4
+
+        for attempt in range(max_retries):
+            try:
+                response = client.models.embed_content(
+                    model=EMBEDDING_MODEL,
+                    contents=texts,
+                    config=types.EmbedContentConfig(
+                        task_type="RETRIEVAL_DOCUMENT",
+                        output_dimensionality=EMBEDDING_DIMENSION,
+                    ),
+                )
+                for chunk, emb in zip(chunk_batch, response.embeddings):
+                    vectors_to_upsert.append({
+                        "id": chunk["id"],
+                        "values": emb.values,
+                        "metadata": chunk["metadata"]
+                    })
+                logger.info(f"Embedded batch {i // batch_size + 1}/{(len(chunks) + batch_size - 1) // batch_size} ({len(vectors_to_upsert)}/{len(chunks)} chunks)")
+                time.sleep(1.0)
+                break
+            except Exception as e:
+                logger.warning(f"Error embedding batch starting at index {i} (attempt {attempt + 1}/{max_retries}): {e}")
+                if attempt < max_retries - 1:
+                    sleep_time = (attempt + 1) * 10
+                    logger.info(f"Sleeping {sleep_time}s before retrying...")
+                    time.sleep(sleep_time)
+                else:
+                    logger.error(f"Failed to embed batch starting at index {i} after {max_retries} attempts.")
+
+    # Upsert to Pinecone
+    logger.info(f"Upserting {len(vectors_to_upsert)} vectors to Pinecone...")
+    upsert_batch_size = 50
+    for i in range(0, len(vectors_to_upsert), upsert_batch_size):
+        batch = vectors_to_upsert[i:i + upsert_batch_size]
         index.upsert(vectors=batch)
 
     logger.info(f"Successfully uploaded {len(vectors_to_upsert)} chunks to Pinecone!")
@@ -201,7 +225,8 @@ def query_standards(query_text: str, top_k: int = 2):
             )
             query_vector = response.embeddings[0].values
             results = index.query(vector=query_vector, top_k=top_k, include_metadata=True)
-            matches = results.get("matches", [])
+            MIN_SCORE = 0.5
+            matches = [m for m in results.get("matches", []) if m.get("score", 0) >= MIN_SCORE]
         except Exception as e:
             logger.error(f"Error during Pinecone query '{query_text}': {e}")
 
@@ -285,19 +310,28 @@ def generate_answer(query_text: str, matches: list) -> str:
         match.get("metadata", {}).get("text", "") for match in matches
     )
 
-    prompt = f"""
-You are a helpful assistant answering questions about BIS standards and schemes.
+    prompt = f"""You are an expert assistant on BIS (Bureau of Indian Standards) standards and certification schemes.
+
+Your job is to answer questions using ONLY the context provided below. Always give specific numeric values, limits, and clause references when available in the context.
 
 Context:
 {context_text}
 
 Question: {query_text}
 
-Format your answer using Markdown:
-- Use **bold** for key terms and numeric limits
-- Use bullet points for lists of requirements or limits
-- Use a short heading if the answer covers multiple sub-topics
-- Keep paragraphs short (2-3 sentences max)
+Answer in this exact structure:
+1. Start with the standard name/number and a direct answer to the question.
+2. List all specific numeric limits clearly using bullet points, like:
+   - **Acceptable Limit:** [value] [unit]
+   - **Permissible Limit (in absence of alternate source):** [value] [unit]
+3. Add a short "Context:" paragraph (2-3 sentences) explaining what the parameter means and when the permissible limit applies.
+4. End with a "Source:" line citing the exact standard number, table, and clause reference from the context.
+
+Rules:
+- NEVER make up numbers. Only use values explicitly present in the context.
+- If the context does not contain the specific value asked for, say: "The provided context does not contain this specific value."
+- Always use **bold** for numeric limits and key terms.
+- Do not add any preamble or closing remarks outside the structure above.
 """
 
     try:

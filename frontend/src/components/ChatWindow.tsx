@@ -49,26 +49,16 @@ function ChatWindow() {
             let sourcesList: Source[] = [];
 
             if (data.results && data.results.length > 0) {
-                // Pick the result with highest keyword relevance to query
-                const queryWords = trimmedMessage.toLowerCase().split(/\s+/).filter(w => w.length > 3);
-                let bestMatch = data.results[0];
-                let maxHits = -1;
-
-                for (const item of data.results) {
-                    const fullStr = `${item.title || ''} ${item.standard_number || ''} ${item.text || ''}`.toLowerCase();
-                    const hits = queryWords.reduce((acc, w) => acc + (fullStr.includes(w) ? 1 : 0), 0);
-                    if (hits > maxHits) {
-                        maxHits = hits;
-                        bestMatch = item;
-                    }
-                }
-
-                assistantContent = bestMatch.text || `${t.relevantStandardFound} ${bestMatch.title || bestMatch.standard_number}`;
-
                 sourcesList = data.results.map((item: { standard_number?: string; standard_id?: string; title?: string; text?: string; score?: number }) => ({
                     title: `${item.standard_number || item.standard_id || t.bisStandardFallback} - ${item.title || t.indianStandardFallback}`,
                     description: item.text ? (item.text.length > 150 ? item.text.substring(0, 150) + "..." : item.text) : `${t.matchScore} ${((item.score ?? 0) * 100).toFixed(1)}%`,
                 }));
+            }
+
+            if (data.answer) {
+                assistantContent = data.answer;
+            } else if (data.results && data.results.length > 0) {
+                assistantContent = data.results[0].text || `${t.relevantStandardFound} ${data.results[0].title || data.results[0].standard_number}`;
             } else {
                 assistantContent = t.noResultsFound;
             }
