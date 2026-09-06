@@ -3,9 +3,20 @@ import json
 import logging
 from pathlib import Path
 from dotenv import load_dotenv
-from google import genai
-from google.genai import types
-from pinecone import Pinecone, ServerlessSpec
+
+try:
+    from google import genai
+    from google.genai import types
+except Exception:
+    genai = None
+    types = None
+
+try:
+    from pinecone import Pinecone, ServerlessSpec
+except Exception:
+    Pinecone = None
+    ServerlessSpec = None
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -175,25 +186,94 @@ def index_standards():
 
 # 5. Reusable Retrieval Function
 def query_standards(query_text: str, top_k: int = 2):
-    if not client or not index:
-        logger.warning("Client or index not initialized. Cannot perform query.")
-        return []
+    matches = []
+    
+    # Try Pinecone vector search first
+    if client and index:
+        try:
+            response = client.models.embed_content(
+                model=EMBEDDING_MODEL,
+                contents=query_text,
+                config=types.EmbedContentConfig(
+                    task_type="RETRIEVAL_QUERY",
+                    output_dimensionality=EMBEDDING_DIMENSION,
+                ),
+            )
+            query_vector = response.embeddings[0].values
+            results = index.query(vector=query_vector, top_k=top_k, include_metadata=True)
+            matches = results.get("matches", [])
+        except Exception as e:
+            logger.error(f"Error during Pinecone query '{query_text}': {e}")
 
-    try:
-        response = client.models.embed_content(
-            model=EMBEDDING_MODEL,
-            contents=query_text,
-            config=types.EmbedContentConfig(
-                task_type="RETRIEVAL_QUERY",
-                output_dimensionality=EMBEDDING_DIMENSION,
-            ),
-        )
-        query_vector = response.embeddings[0].values
-        results = index.query(vector=query_vector, top_k=top_k, include_metadata=True)
-        return results.get("matches", [])
-    except Exception as e:
-        logger.error(f"Error during query '{query_text}': {e}")
-        return []
+    # Robust local fallback search across loaded standard chunks if vector search returns no results
+    if not matches and chunks:
+        logger.info(f"Vector search returned no results. Performing local fallback search across {len(chunks)} chunks...")
+        query_words = [w.lower() for w in query_text.split() if len(w) > 2]
+        scored_chunks = []
+        for chunk in chunks:
+            text_lower = chunk["text"].lower()
+            match_count = sum(1 for word in query_words if word in text_lower)
+            if match_count > 0:
+                rel_score = min(0.98, round(0.60 + (match_count * 0.08), 2))
+                scored_chunks.append({
+                    "score": rel_score,
+                    "metadata": chunk["metadata"]
+                })
+        scored_chunks.sort(key=lambda x: x["score"], reverse=True)
+        matches = scored_chunks[:top_k]
+
+    return matches
+
+# Automatically run indexing when module is initialized if index is empty
+try:
+    if index_standards and client and index:
+        index_stats = index.describe_index_stats()
+        total_vectors = index_stats.get("total_vector_count", 0)
+        if total_vectors == 0:
+            logger.info("Pinecone index is empty. Automatically indexing BIS standards and schemes...")
+            index_standards()
+except Exception as idx_err:
+    logger.warning(f"Auto-indexing check skipped: {idx_err}")
+
+# 6. "Recommend Standards" Helper Function (For Member 4 - Compliance Checker)
+def recommend_standards_for_product(product_description: str, top_k: int = 3):
+    """
+    Given a product description (e.g. 'packaged drinking water', 'gold jewellery', 'lithium ion battery'),
+    retrieves matching BIS standards, certification schemes, and accredited testing laboratories using Gemini.
+    """
+    query = f"Applicable BIS Indian Standards, certification scheme rules, and testing requirements for {product_description}"
+    matches = query_standards(query, top_k=top_k)
+
+    recommended_standards = []
+    applicable_schemes = []
+    recommended_labs = []
+
+    for match in matches:
+        metadata = match.get("metadata", {})
+        score = round(match.get("score", 0.0), 4)
+        chunk_type = metadata.get("type", "")
+
+        item_info = {
+            "title": metadata.get("title") or metadata.get("standard_number"),
+            "standard_number": metadata.get("standard_number"),
+            "relevance_score": score,
+            "matched_excerpt": metadata.get("text", "")
+        }
+
+        if chunk_type == "laboratory":
+            recommended_labs.append(item_info)
+        elif "scheme" in str(metadata.get("standard_id", "")).lower() or "scheme" in str(metadata.get("title", "")).lower():
+            applicable_schemes.append(item_info)
+        else:
+            recommended_standards.append(item_info)
+
+    return {
+        "product_description": product_description,
+        "total_matches_found": len(matches),
+        "recommended_standards": recommended_standards,
+        "applicable_schemes": applicable_schemes,
+        "accredited_testing_labs": recommended_labs
+    }
 
 # 6. Generate a formatted answer using Gemini from retrieved chunks
 def generate_answer(query_text: str, matches: list) -> str:
@@ -236,10 +316,10 @@ if __name__ == "__main__":
     index_standards()
 
     test_queries = [
-
         "What are the acceptable limits for pH and TDS in drinking water according to IS 10500?",
-        "What is the bend test procedure for metallic materials under IS 1599?",
-        "What are the chemical composition requirements for carbon steel billets under IS 1875?"
+        "What are the mandatory hallmarking purity grades and HUID rules for gold jewellery?",
+        "Which electronics require self-declaration of conformity under the BIS Compulsory Registration Scheme (CRS)?",
+        "Which BIS testing laboratories in Northern Region test drinking water and steel?"
     ]
 
     for q in test_queries:
@@ -251,3 +331,7 @@ if __name__ == "__main__":
             text = match.get('metadata', {}).get('text', '')
             print(f"Score: {score:.4f}")
             print(f"Content: {text}\n")
+
+    print("\n--- Testing Product Recommendation for Member 4 ---")
+    rec = recommend_standards_for_product("22K Gold Jewellery Ring")
+    print(json.dumps(rec, indent=2))
