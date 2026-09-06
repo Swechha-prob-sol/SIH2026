@@ -18,6 +18,7 @@
 - [Project Structure](#project-structure)
 - [Setup & Installation](#setup--installation)
 - [Running Locally](#running-locally)
+- [Cloud Deployment (Render + Vercel + Supabase)](#cloud-deployment-render--vercel--supabase)
 - [API Overview](#api-overview)
 - [Testing & Validation](#testing--validation)
 - [Troubleshooting](#troubleshooting)
@@ -225,9 +226,87 @@ Seed data:
 python backend/services/rag_service.py --seed
 curl http://localhost:8000/api/v1/standards | jq '.standards | length'
 ```
- 
+
 ---
- 
+
+## Cloud Deployment (Render + Vercel + Supabase)
+
+Deploy the BIS Standards AI Assistant to the cloud using free-tier friendly services:
+- **Database**: [Supabase](https://supabase.com) (Managed PostgreSQL)
+- **Backend API**: [Render](https://render.com) (FastAPI Web Service)
+- **Frontend UI**: [Vercel](https://vercel.com) (Vite + React Static SPA)
+
+### 1. Database Setup (Supabase)
+
+> **Is Supabase required?**
+> **Not strictly mandatory**, because the backend will fall back to local SQLite (`sqlite:///./bis_fallback.db`) if no `DATABASE_URL` is provided. **However, Supabase is strongly recommended for production** because free hosting platforms like Render have **ephemeral filesystems** (local SQLite files are lost whenever the server restarts or sleeps). Supabase gives you a permanent, free-tier PostgreSQL database.
+
+1. Go to [supabase.com](https://supabase.com) and create a free project.
+2. Set and securely save your database password.
+3. In your Supabase dashboard:
+   - Navigate to **Project Settings** > **Database**.
+   - Scroll to **Connection String** and select the **URI** tab.
+   - Choose either **Session** mode (port 5432) or **Transaction** mode / Pooler (port 6543).
+   - Format:
+     ```
+     postgresql://postgres.[PROJECT-REF]:[YOUR-PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres
+     ```
+4. (Optional) Run seeds / migrations on Supabase:
+   ```bash
+   DATABASE_URL="your-supabase-connection-string" python -m backend.seed
+   ```
+
+---
+
+### 2. Backend Deployment (Render)
+
+Render runs the FastAPI backend server (`backend/main.py`).
+
+1. Push your repository to GitHub.
+2. Sign in to [render.com](https://render.com) and click **New +** > **Web Service**.
+3. Connect your GitHub repository (`SIH2026`).
+4. Configure service parameters:
+   - **Name**: `bis-backend` (or your choice)
+   - **Region**: Choose the closest region (e.g., Singapore or Frankfurt)
+   - **Root Directory**: Leave blank (root directory `.`)
+   - **Environment / Runtime**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
+5. Under **Environment Variables**, add:
+   | Key | Value / Notes |
+   |---|---|
+   | `DATABASE_URL` | Your Supabase PostgreSQL URI (`postgresql://postgres:...`) |
+   | `PINECONE_API_KEY` | Your Pinecone API Key |
+   | `GEMINI_API_KEY` | Your Google Gemini API Key |
+   | `REDIS_URL` | *(Optional)* Upstash / Redis instance URL |
+   | `PYTHON_VERSION` | `3.11.9` |
+6. Click **Deploy Web Service**.
+7. Once deployment finishes, copy your Render URL (e.g. `https://bis-backend.onrender.com`).
+   - Check health endpoint: `https://bis-backend.onrender.com/health`
+
+---
+
+### 3. Frontend Deployment (Vercel)
+
+Vercel hosts the Vite + React TypeScript single page application.
+
+1. Sign in to [vercel.com](https://vercel.com) and click **Add New...** > **Project**.
+2. Select and import your GitHub repository.
+3. In the project setup screen:
+   - **Framework Preset**: `Vite`
+   - **Root Directory**: Click "Edit" and set to `frontend`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+   - **Install Command**: `npm install`
+4. Under **Environment Variables**, add:
+   | Key | Value |
+   |---|---|
+   | `VITE_API_URL` | `https://bis-backend.onrender.com` (Your Render backend URL) |
+5. Click **Deploy**.
+6. Once deployed, Vercel will provide your live URL (e.g., `https://bis-assistant.vercel.app`).
+
+---
+
 ## API Overview
  
 Base URL (dev): `http://localhost:8000/api/v1`
