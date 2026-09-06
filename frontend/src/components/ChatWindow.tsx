@@ -1,22 +1,15 @@
 import { useState } from "react";
-import axios from "axios";
 import SourceCard from "./SourceCard";
 import { useLanguage } from "../context/LanguageContext";
 import ReactMarkdown from "react-markdown";
 
-function ChatWindow() {
-    const { t } = useLanguage();
-    const [message, setMessage] = useState("");
-
-    const [messages, setMessages] = useState<
-        { role: "user" | "assistant"; content: string; sources?: { title: string; description: string }[] }[]
-    >([]);
 const BACKEND_URL = "http://localhost:8000";
 
 type Source = { title: string; description: string };
 type Message = { role: "user" | "assistant"; content: string; sources?: Source[] };
 
 function ChatWindow() {
+    const { t } = useLanguage();
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -27,19 +20,14 @@ function ChatWindow() {
         const trimmedMessage = message.trim();
         if (!trimmedMessage || isLoading) return;
 
-        const userMsg = { role: "user" as const, content: trimmedMessage };
-
-        setMessages((previousMessages) => [
-            ...previousMessages,
-            userMsg,
+        setMessages((prev) => [
+            ...prev,
+            { role: "user", content: trimmedMessage },
         ]);
-
-        setMessages((prev) => [...prev, { role: "user", content: trimmedMessage }]);
         setMessage("");
         setIsLoading(true);
 
         try {
-            const response = await fetch("http://localhost:8000/query", {
             const response = await fetch(`${BACKEND_URL}/query`, {
                 method: "POST",
                 headers: {
@@ -58,7 +46,6 @@ function ChatWindow() {
             const data = await response.json();
 
             let assistantContent = "";
-            let sourcesList: { title: string; description: string }[] = [];
             let sourcesList: Source[] = [];
 
             if (data.results && data.results.length > 0) {
@@ -86,18 +73,6 @@ function ChatWindow() {
                 assistantContent = t.noResultsFound;
             }
 
-            setMessages((previousMessages) => [
-                ...previousMessages,
-                assistantContent = bestMatch.text || `Relevant Standard Found: ${bestMatch.title || bestMatch.standard_number}`;
-
-                sourcesList = data.results.map((item: any) => ({
-                    title: `${item.standard_number || item.standard_id || "BIS Standard"} - ${item.title || "Indian Standard"}`,
-                    description: item.text ? (item.text.length > 150 ? item.text.substring(0, 150) + "..." : item.text) : `Match Score: ${(item.score * 100).toFixed(1)}%`,
-                }));
-            } else {
-                assistantContent = "No matching BIS standards found for your query. Please rephrase or check standard codes.";
-            }
-
             setMessages((prev) => [
                 ...prev,
                 {
@@ -108,16 +83,11 @@ function ChatWindow() {
             ]);
         } catch (err) {
             console.error("Backend fetch error:", err);
-            setMessages((previousMessages) => [
-                ...previousMessages,
-                {
-                    role: "assistant",
-                    content: t.serverConnectionError,
             setMessages((prev) => [
                 ...prev,
                 {
                     role: "assistant",
-                    content: "Could not connect to the backend server. Please make sure Uvicorn backend is running on http://localhost:8000.",
+                    content: t.serverConnectionError,
                 },
             ]);
         } finally {
@@ -265,9 +235,6 @@ function ChatWindow() {
                                         <div className="mt-4 border-t border-slate-200 pt-3 dark:border-slate-800">
                                             <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-400">
                                                 {t.retrievedSources} ({msg.sources.length})
-                                        <div className="mt-4 border-t border-slate-200 pt-3">
-                                            <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                                                Retrieved Sources ({msg.sources.length})
                                             </p>
 
                                             {msg.sources.map((src, sIdx) => (
