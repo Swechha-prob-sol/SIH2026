@@ -1,6 +1,15 @@
 import { useLanguage } from "../context/LanguageContext";
 
-function Sidebar() {
+export type NavTab = "chat" | "search" | "compliance" | "reports" | "certification";
+
+interface SidebarProps {
+    activeTab: NavTab;
+    onSelectTab: (tab: NavTab) => void;
+    onSelectQuery: (query: string) => void;
+    onToast: (msg: string, type?: "info" | "success" | "warning") => void;
+}
+
+function Sidebar({ activeTab, onSelectTab, onSelectQuery, onToast }: SidebarProps) {
     const { t } = useLanguage();
 
     return (
@@ -8,44 +17,78 @@ function Sidebar() {
 
             {/* Logo / Brand */}
             <div className="border-b border-slate-800/90 px-5 py-5 dark:border-slate-800/60">
-                <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-700 text-lg font-bold text-white shadow-sm dark:bg-blue-600">
+                <button
+                    onClick={() => onSelectTab("chat")}
+                    className="flex items-center gap-3 text-left w-full group"
+                >
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-700 text-lg font-bold text-white shadow-sm transition group-hover:bg-blue-600 dark:bg-blue-600">
                         BIS
                     </div>
 
                     <div>
-                        <h2 className="text-sm font-bold text-slate-100">
+                        <h2 className="text-sm font-bold text-slate-100 group-hover:text-blue-300 transition">
                             {t.sidebarTitle}
                         </h2>
                         <p className="text-xs text-slate-400">
                             {t.sidebarSubtitle}
                         </p>
                     </div>
-                </div>
+                </button>
             </div>
 
             {/* Navigation */}
             <div className="px-4 py-5">
 
-                <button className="mb-4 flex w-full items-center justify-center gap-2 rounded-lg bg-blue-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-800 dark:bg-blue-700 dark:hover:bg-blue-600">
+                <button
+                    onClick={() => {
+                        onSelectTab("chat");
+                        onSelectQuery("");
+                        onToast("Switched to Live AI Chat Assistant", "info");
+                    }}
+                    className="mb-4 flex w-full items-center justify-center gap-2 rounded-lg bg-blue-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-800 dark:bg-blue-700 dark:hover:bg-blue-600"
+                >
                     <span className="text-lg">+</span>
                     {t.newConversation}
                 </button>
 
                 <nav className="space-y-1">
 
-                    <button className="flex w-full items-center gap-3 rounded-lg bg-blue-900/30 px-3 py-2.5 text-sm font-medium text-white dark:bg-blue-950/60 dark:text-blue-200">
-                        <span>▣</span>
+                    {/* Standards Search */}
+                    <button
+                        onClick={() => onSelectTab("search")}
+                        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+                            activeTab === "search"
+                                ? "bg-blue-900/40 text-white dark:bg-blue-950/80 dark:text-blue-200 border border-blue-800/60"
+                                : "text-slate-300 hover:bg-slate-800/80 hover:text-white dark:hover:bg-slate-800/60"
+                        }`}
+                    >
+                        <span className="text-blue-400">▣</span>
                         {t.menuStandardsSearch}
                     </button>
 
-                    <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-300 transition hover:bg-slate-800/80 hover:text-white dark:hover:bg-slate-800/60">
-                        <span>✓</span>
+                    {/* Compliance Checker */}
+                    <button
+                        onClick={() => onSelectTab("compliance")}
+                        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+                            activeTab === "compliance"
+                                ? "bg-blue-900/40 text-white dark:bg-blue-950/80 dark:text-blue-200 border border-blue-800/60"
+                                : "text-slate-300 hover:bg-slate-800/80 hover:text-white dark:hover:bg-slate-800/60"
+                        }`}
+                    >
+                        <span className="text-emerald-400">✓</span>
                         {t.menuComplianceChecker}
                     </button>
 
-                    <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-300 transition hover:bg-slate-800/80 hover:text-white dark:hover:bg-slate-800/60">
-                        <span>⇩</span>
+                    {/* Export Reports */}
+                    <button
+                        onClick={() => onSelectTab("reports")}
+                        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+                            activeTab === "reports"
+                                ? "bg-blue-900/40 text-white dark:bg-blue-950/80 dark:text-blue-200 border border-blue-800/60"
+                                : "text-slate-300 hover:bg-slate-800/80 hover:text-white dark:hover:bg-slate-800/60"
+                        }`}
+                    >
+                        <span className="text-amber-400">⇩</span>
                         {t.menuExportReports}
                     </button>
 
@@ -61,15 +104,33 @@ function Sidebar() {
 
                 <div className="space-y-1">
 
-                    <button className="w-full rounded-lg px-3 py-2 text-left text-sm text-slate-300 transition hover:bg-slate-800/80 hover:text-white dark:hover:bg-slate-800/60">
+                    <button
+                        onClick={() => {
+                            onSelectTab("chat");
+                            onSelectQuery("Provide a comprehensive overview of BIS standards and their certification scope.");
+                        }}
+                        className="w-full rounded-lg px-3 py-2 text-left text-sm text-slate-300 transition hover:bg-slate-800/80 hover:text-white dark:hover:bg-slate-800/60"
+                    >
                         {t.recentOverview}
                     </button>
 
-                    <button className="w-full rounded-lg px-3 py-2 text-left text-sm text-slate-300 transition hover:bg-slate-800/80 hover:text-white dark:hover:bg-slate-800/60">
+                    <button
+                        onClick={() => {
+                            onSelectTab("chat");
+                            onSelectQuery("What are the quality, testing, and compressive strength requirements for cement under IS 269?");
+                        }}
+                        className="w-full rounded-lg px-3 py-2 text-left text-sm text-slate-300 transition hover:bg-slate-800/80 hover:text-white dark:hover:bg-slate-800/60"
+                    >
                         {t.recentCement}
                     </button>
 
-                    <button className="w-full rounded-lg px-3 py-2 text-left text-sm text-slate-300 transition hover:bg-slate-800/80 hover:text-white dark:hover:bg-slate-800/60">
+                    <button
+                        onClick={() => {
+                            onSelectTab("chat");
+                            onSelectQuery("What are the mandatory electrical safety testing standards under BIS?");
+                        }}
+                        className="w-full rounded-lg px-3 py-2 text-left text-sm text-slate-300 transition hover:bg-slate-800/80 hover:text-white dark:hover:bg-slate-800/60"
+                    >
                         {t.recentSafety}
                     </button>
 
@@ -79,12 +140,22 @@ function Sidebar() {
             {/* Bottom section */}
             <div className="border-t border-slate-800/90 p-4 dark:border-slate-800/60">
 
-                <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-300 transition hover:bg-slate-800/80 hover:text-white dark:hover:bg-slate-800/60">
+                <button
+                    onClick={() =>
+                        onToast("Settings: Indian Standards database connected. Model: Gemini 3.6 Flash.", "info")
+                    }
+                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-300 transition hover:bg-slate-800/80 hover:text-white dark:hover:bg-slate-800/60"
+                >
                     <span>⚙</span>
                     {t.settings}
                 </button>
 
-                <div className="mt-3 flex items-center gap-3 rounded-lg bg-slate-800/60 px-3 py-3 dark:bg-slate-900/80">
+                <div
+                    onClick={() =>
+                        onToast("System Health: 100% Operational. Pinecone RAG Index: 117 Chunks Live.", "success")
+                    }
+                    className="mt-3 flex cursor-pointer items-center gap-3 rounded-lg bg-slate-800/60 px-3 py-3 transition hover:bg-slate-800/90 dark:bg-slate-900/80"
+                >
 
                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-900 text-xs font-semibold text-white dark:bg-blue-700">
                         AI

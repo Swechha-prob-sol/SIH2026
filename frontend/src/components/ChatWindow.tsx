@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SourceCard from "./SourceCard";
 import { useLanguage } from "../context/LanguageContext";
 import ReactMarkdown from "react-markdown";
@@ -8,11 +8,25 @@ const BACKEND_URL = "http://localhost:8000";
 type Source = { title: string; description: string };
 type Message = { role: "user" | "assistant"; content: string; sources?: Source[] };
 
-function ChatWindow() {
+interface ChatWindowProps {
+    initialQuery?: string;
+    onClearInitialQuery?: () => void;
+}
+
+function ChatWindow({ initialQuery, onClearInitialQuery }: ChatWindowProps) {
     const { t } = useLanguage();
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        if (initialQuery && initialQuery.trim()) {
+            setMessage(initialQuery);
+            if (onClearInitialQuery) {
+                onClearInitialQuery();
+            }
+        }
+    }, [initialQuery, onClearInitialQuery]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
