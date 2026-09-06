@@ -1,27 +1,22 @@
 from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
-
 from backend.database import get_db
 from backend.models import Standard
-
 import json
 import hashlib
 from backend.redis_client import redis_client
 from backend.schemas import QueryRequest, QueryResponse, QueryMatch
-from rag_pipeline import query_standards
+from rag_pipeline import query_standards, generate_answer
 
 app = FastAPI()
-
 
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
 
-
 @app.get("/standards")
 def get_standards(db: Session = Depends(get_db)):
     standards = db.query(Standard).all()
-
     return [
         {
             "id": standard.id,
@@ -31,17 +26,16 @@ def get_standards(db: Session = Depends(get_db)):
             "created_at": standard.created_at,
         }
         for standard in standards
-    ]   
+    ]
+
 @app.post("/query", response_model=QueryResponse)
 def query_endpoint(request: QueryRequest):
     cache_key = f"query:{hashlib.sha256(request.query_text.encode()).hexdigest()}:{request.top_k}"
-
     cached_result = redis_client.get(cache_key)
     if cached_result:
-        return QueryResponse(query=request.query_text, cached=True, results=json.loads(cached_result))
+        return QueryResponse(**json.loads(cached_result))
 
     matches = query_standards(request.query_text, top_k=request.top_k)
-
     results = [
         QueryMatch(
             standard_id=match.get("metadata", {}).get("standard_id"),
@@ -54,6 +48,14 @@ def query_endpoint(request: QueryRequest):
         for match in matches
     ]
 
-    redis_client.setex(cache_key, 3600, json.dumps([r.model_dump() for r in results]))
+    answer = generate_answer(request.query_text, matches)
 
-    return QueryResponse(query=request.query_text, cached=False, results=results)
+    response = QueryResponse(
+        query=request.query_text,
+        cached=False,
+        results=results,
+        answer=answer,
+    )
+
+    redis_client.setex(cache_key, 3600, response.model_dump_json())
+    return response
