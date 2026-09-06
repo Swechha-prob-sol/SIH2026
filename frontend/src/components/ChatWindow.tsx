@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SourceCard from "./SourceCard";
 import { useLanguage } from "../context/LanguageContext";
+import ReactMarkdown from "react-markdown";
 
 function ChatWindow() {
     const { t } = useLanguage();
@@ -180,7 +181,57 @@ function ChatWindow() {
                                         {msg.role === "user" ? t.userRole : t.assistantRole}
                                     </div>
 
-                                    <div>{msg.content}</div>
+                                    <ReactMarkdown
+                                        components={{
+                                            h1: ({ children }) => (
+                                                <h1 className="mb-3 text-xl font-bold text-slate-900 dark:text-slate-100">
+                                                    {children}
+                                                </h1>
+                                            ),
+                                            h2: ({ children }) => (
+                                                <h2 className="mb-2 mt-4 text-lg font-semibold text-slate-900 dark:text-slate-100">
+                                                    {children}
+                                                </h2>
+                                            ),
+                                            h3: ({ children }) => (
+                                                <h3 className="mb-2 mt-3 text-base font-semibold text-slate-900 dark:text-slate-100">
+                                                    {children}
+                                                </h3>
+                                            ),
+                                            p: ({ children }) => (
+                                                <p className="mb-3 last:mb-0 leading-7">
+                                                    {children}
+                                                </p>
+                                            ),
+                                            ul: ({ children }) => (
+                                                <ul className="mb-3 ml-5 list-disc space-y-1">
+                                                    {children}
+                                                </ul>
+                                            ),
+                                            ol: ({ children }) => (
+                                                <ol className="mb-3 ml-5 list-decimal space-y-1">
+                                                    {children}
+                                                </ol>
+                                            ),
+                                            li: ({ children }) => (
+                                                <li className="pl-1">
+                                                    {children}
+                                                </li>
+                                            ),
+                                            strong: ({ children }) => (
+                                                <strong className="font-semibold text-slate-900 dark:text-slate-100">
+                                                    {children}
+                                                </strong>
+                                            ),
+                                            code: ({ children }) => (
+                                                <code className="rounded bg-slate-100 px-1.5 py-0.5 text-xs dark:bg-slate-800">
+                                                    {children}
+                                                </code>
+                                            ),
+                                        }}
+                                    >
+                                        {msg.content}
+                                    </ReactMarkdown>
 
                                     {msg.role === "assistant" && msg.sources && msg.sources.length > 0 && (
                                         <div className="mt-4 border-t border-slate-200 pt-3 dark:border-slate-800">
