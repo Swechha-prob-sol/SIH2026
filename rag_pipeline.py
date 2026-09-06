@@ -275,6 +275,41 @@ def recommend_standards_for_product(product_description: str, top_k: int = 3):
         "accredited_testing_labs": recommended_labs
     }
 
+# 6. Generate a formatted answer using Gemini from retrieved chunks
+def generate_answer(query_text: str, matches: list) -> str:
+    if not client:
+        logger.warning("Gemini client not configured. Cannot generate answer.")
+        return "Answer generation is not available right now."
+
+    context_text = "\n\n".join(
+        match.get("metadata", {}).get("text", "") for match in matches
+    )
+
+    prompt = f"""
+You are a helpful assistant answering questions about BIS standards and schemes.
+
+Context:
+{context_text}
+
+Question: {query_text}
+
+Format your answer using Markdown:
+- Use **bold** for key terms and numeric limits
+- Use bullet points for lists of requirements or limits
+- Use a short heading if the answer covers multiple sub-topics
+- Keep paragraphs short (2-3 sentences max)
+"""
+
+    try:
+        response = client.models.generate_content(
+            model="gemini-3.6-flash",
+            contents=prompt,
+        )
+        return response.text
+    except Exception as e:
+        logger.error(f"Error generating answer for '{query_text}': {e}")
+        return "Sorry, I couldn't generate an answer right now."
+
 # Run test queries if executed directly
 if __name__ == "__main__":
     # Index standards chunks into Pinecone vector database

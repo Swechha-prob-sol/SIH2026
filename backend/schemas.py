@@ -13,8 +13,9 @@ class StandardBase(BaseModel):
     title: str
     description: Optional[str] = None
 
-
 class StandardResponse(StandardBase):
+    id: int
+    created_at: datetime
     id: Optional[int] = None
     standard_id: Optional[str] = None
     domain: Optional[str] = None
@@ -45,6 +46,8 @@ class QueryMatch(BaseModel):
 class QueryResponse(BaseModel):
     query: str
     cached: bool
+    results: list[QueryMatch]
+    answer: Optional[str] = None
     results: List[QueryMatch]
 
 
