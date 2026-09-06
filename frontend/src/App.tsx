@@ -8,6 +8,7 @@ import CertificationSchemes from "./components/CertificationSchemes";
 import LanguageToggle from "./components/LanguageToggle";
 import ThemeToggle from "./components/ThemeToggle";
 import Toast, { type ToastMessage } from "./components/Toast";
+import SettingsModal from "./components/SettingsModal";
 import { LanguageProvider, useLanguage } from "./context/LanguageContext";
 import { ThemeProvider } from "./context/ThemeContext";
 
@@ -16,6 +17,7 @@ function MainContent() {
   const [activeTab, setActiveTab] = useState<NavTab>("chat");
   const [initialQuery, setInitialQuery] = useState<string>("");
   const [toast, setToast] = useState<ToastMessage | null>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const showToast = (text: string, type: "info" | "success" | "warning" = "info") => {
     setToast({
@@ -38,6 +40,7 @@ function MainContent() {
         onSelectTab={(tab) => setActiveTab(tab)}
         onSelectQuery={handleOpenInChat}
         onToast={showToast}
+        onOpenSettings={() => setIsSettingsOpen(true)}
       />
 
       <main className="flex min-w-0 flex-1 flex-col">
@@ -188,6 +191,12 @@ function MainContent() {
 
       {/* Global Interactive Toast */}
       <Toast toast={toast} onClose={() => setToast(null)} />
+      
+      <SettingsModal 
+        isOpen={isSettingsOpen} 
+        onClose={() => setIsSettingsOpen(false)} 
+        onToast={showToast} 
+      />
     </div>
   );
 }

@@ -7,9 +7,10 @@ interface SidebarProps {
     onSelectTab: (tab: NavTab) => void;
     onSelectQuery: (query: string) => void;
     onToast: (msg: string, type?: "info" | "success" | "warning") => void;
+    onOpenSettings: () => void;
 }
 
-function Sidebar({ activeTab, onSelectTab, onSelectQuery, onToast }: SidebarProps) {
+function Sidebar({ activeTab, onSelectTab, onSelectQuery, onToast, onOpenSettings }: SidebarProps) {
     const { t } = useLanguage();
 
     return (
@@ -141,9 +142,7 @@ function Sidebar({ activeTab, onSelectTab, onSelectQuery, onToast }: SidebarProp
             <div className="border-t border-slate-800/90 p-4 dark:border-slate-800/60">
 
                 <button
-                    onClick={() =>
-                        onToast("Settings: Indian Standards database connected. Model: Gemini 3.6 Flash.", "info")
-                    }
+                    onClick={onOpenSettings}
                     className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-300 transition hover:bg-slate-800/80 hover:text-white dark:hover:bg-slate-800/60"
                 >
                     <span>⚙</span>
