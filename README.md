@@ -39,7 +39,7 @@ India has **10,000+ BIS standards** covering manufacturing, food safety, constru
 **BIS RAG Assistant** is an AI-powered compliance co-pilot that:
  
 1. **Retrieves** relevant BIS standards using hybrid (semantic + keyword) search
-2. **Augments** retrieval with Claude for context-aware answers
+2. **Augments** retrieval with Google Gemini (Gemini Flash) for context-aware answers
 3. **Generates** accurate, cited responses with direct links to standard sections
 ### Impact
 - **Speed:** 30-second compliance check vs. 30-minute manual search
@@ -64,13 +64,13 @@ India has **10,000+ BIS standards** covering manufacturing, food safety, constru
 ### Backend
 ```
 Framework:      FastAPI (Python 3.11)
-Database:       PostgreSQL (vector-aware)
-Vector DB:      Pinecone or Weaviate
-AI Model:       Claude 3.5 Sonnet (Anthropic)
-Embeddings:     sentence-transformers/all-MiniLM-L6-v2
+Database:       PostgreSQL (vector-aware) / SQLite fallback
+Vector DB:      Pinecone
+AI Model:       Google Gemini 2.5 / 2.0 Flash (Google GenAI)
+Embeddings:     gemini-embedding-001 (768-dim)
 Caching:        Redis
 PDF Export:     reportlab
-Deployment:     Docker + AWS EC2
+Deployment:     Render + Vercel + Supabase
 ```
  
 ### Frontend
@@ -185,8 +185,8 @@ open http://localhost:5173                # Frontend
 ```env
 DATABASE_URL=postgresql://user:password@localhost:5432/bis
 PINECONE_API_KEY=your_pinecone_key
-PINECONE_INDEX=bis-standards
-ANTHROPIC_API_KEY=your_claude_api_key
+PINECONE_INDEX_NAME=sih-rag-index
+GEMINI_API_KEY=your_gemini_api_key
 SERVER_HOST=0.0.0.0
 SERVER_PORT=8000
 DEBUG=true
@@ -381,9 +381,9 @@ docker restart postgres
 **RAG returns no results:**
 - Confirm standards are indexed: `python backend/services/rag_service.py --seed`
 - Check `PINECONE_API_KEY` in `.env`
-**Claude API errors (401 / rate limit):**
-- Verify `ANTHROPIC_API_KEY` in `.env`
-- Check usage at [console.anthropic.com](https://console.anthropic.com)
+**Gemini API errors (401 / rate limit):**
+- Verify `GEMINI_API_KEY` in `.env`
+- Check API usage and quotas at [aistudio.google.com](https://aistudio.google.com)
 **Frontend blank page / module errors:**
 ```bash
 cd frontend
@@ -398,8 +398,8 @@ npm install
 **Can it handle all 10,000 BIS standards?**
 This build covers 15–20 key standards. Scaling to the full library requires a distributed vector DB, hybrid search with reranking, and version-controlled indexing.
  
-**What if Claude hallucinates an answer?**
-Every response is cited to source. Accuracy is validated against a 50+ query test set with a 95%+ target; flagged hallucinations feed back into prompt and retrieval tuning.
+**What if the AI hallucinates an answer?**
+Every response is cited to source. Accuracy is validated against a 50+ query test set with a 95%+ target; strict prompt grounding and retrieved citations prevent hallucination.
  
 **Is this available for public use?**
 Not yet — production deployment would require BIS partnership, legal review, and full-library scaling.
@@ -418,6 +418,6 @@ Built for **Smart India Hackathon 2024**. Post-competition use requires approval
 ## Acknowledgments
  
 - **Bureau of Indian Standards (BIS)** — problem statement & domain expertise
-- **Anthropic** — Claude API & technical support
+- **Google** — Gemini API & Generative AI models
 - **SIH Organizers** — hackathon platform & mentorship
  
