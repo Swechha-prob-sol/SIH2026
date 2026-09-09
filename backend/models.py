@@ -1,4 +1,4 @@
-﻿from datetime import datetime
+from datetime import datetime
 
 from backend.database import Base
 
@@ -74,3 +74,16 @@ class Bookmark(Base):
 
     user = relationship("User", back_populates="bookmarks")
     standard = relationship("Standard", back_populates="bookmarks")
+
+
+class ComplianceCheck(Base):
+    __tablename__ = "compliance_checks"
+
+    id = Column(Integer, primary_key=True, index=True)
+    session_id = Column(String(100), nullable=True, index=True)
+    standard_id = Column(String(50), nullable=True, index=True)
+    product_description = Column(Text, nullable=True)
+    result = Column(JSON, nullable=True)        # full PASS/FAIL breakdown
+    score = Column(Integer, nullable=True)      # 0-100 compliance score
+    status = Column(String(20), nullable=True)  # PASS / FAIL / WARNING
+    created_at = Column(DateTime, default=datetime.utcnow)
