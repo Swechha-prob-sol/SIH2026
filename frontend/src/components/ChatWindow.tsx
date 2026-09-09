@@ -3,10 +3,20 @@ import SourceCard from "./SourceCard";
 import { useLanguage } from "../context/LanguageContext";
 import ReactMarkdown from "react-markdown";
 
-const BACKEND_URL = (
-    import.meta.env.VITE_API_URL ||
-    (import.meta.env.DEV ? "http://localhost:8000" : "https://sih2026-wsw9.onrender.com")
-).replace(/\/+$/, "");
+const getBackendUrl = (): string => {
+    let url = (import.meta.env.VITE_API_URL || "").trim();
+    url = url.replace(/^['"]+|['"]+$/g, "");
+    if (!url) {
+        return import.meta.env.DEV ? "http://localhost:8000" : "https://sih2026-wsw9.onrender.com";
+    }
+    url = url.replace(/\/query\/?$/, "").replace(/\/+$/, "");
+    if (!url.includes("localhost") && url.startsWith("http://")) {
+        url = url.replace("http://", "https://");
+    }
+    return url;
+};
+
+const BACKEND_URL = getBackendUrl();
 
 type Source = { title: string; description: string };
 type Message = { role: "user" | "assistant"; content: string; sources?: Source[] };
@@ -21,6 +31,11 @@ function ChatWindow({ initialQuery, onClearInitialQuery }: ChatWindowProps) {
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        // Pre-warm backend on page load to mitigate cold starts
+        fetch(`${BACKEND_URL}/health`, { method: "GET" }).catch(() => {});
+    }, []);
 
     useEffect(() => {
         if (initialQuery && initialQuery.trim()) {
@@ -45,19 +60,46 @@ function ChatWindow({ initialQuery, onClearInitialQuery }: ChatWindowProps) {
         setIsLoading(true);
 
         try {
-            const response = await fetch(`${BACKEND_URL}/query`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    query_text: trimmedMessage,
-                    top_k: 3,
-                }),
-            });
+            let response: Response | null = null;
+            let lastError: any = null;
 
-            if (!response.ok) {
-                throw new Error(`Server status ${response.status}`);
+            // Attempt fetch with auto-retry in case Render is spinning up
+            for (let attempt = 1; attempt <= 2; attempt++) {
+                try {
+                    response = await fetch(`${BACKEND_URL}/query`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            query_text: trimmedMessage,
+                            top_k: 3,
+                        }),
+                    });
+
+                    if (response.ok) {
+                        break;
+                    }
+
+                    // Cold start HTTP status codes: 502, 503, 504
+                    if (attempt === 1 && (response.status === 502 || response.status === 503 || response.status === 504)) {
+                        await new Promise((r) => setTimeout(r, 4000));
+                        continue;
+                    }
+
+                    throw new Error(`Server status ${response.status}`);
+                } catch (err: any) {
+                    lastError = err;
+                    if (attempt === 1) {
+                        await new Promise((r) => setTimeout(r, 3000));
+                        continue;
+                    }
+                    throw err;
+                }
+            }
+
+            if (!response || !response.ok) {
+                throw lastError || new Error("Failed to connect to backend");
             }
 
             const data = await response.json();
@@ -88,13 +130,16 @@ function ChatWindow({ initialQuery, onClearInitialQuery }: ChatWindowProps) {
                     sources: sourcesList,
                 },
             ]);
-        } catch (err) {
+        } catch (err: any) {
             console.error("Backend fetch error:", err);
+            const isColdStart = err?.message?.includes("502") || err?.message?.includes("503") || err?.message?.includes("504");
             setMessages((prev) => [
                 ...prev,
                 {
                     role: "assistant",
-                    content: t.serverConnectionError,
+                    content: isColdStart
+                        ? "⏳ The backend on Render free tier is waking up from idle mode (can take up to 45 seconds). Please resend your message now that the server is warm!"
+                        : t.serverConnectionError,
                 },
             ]);
         } finally {
