@@ -3,7 +3,10 @@ import SourceCard from "./SourceCard";
 import { useLanguage } from "../context/LanguageContext";
 import ReactMarkdown from "react-markdown";
 
-const BACKEND_URL = "http://localhost:8000";
+const BACKEND_URL = (
+    import.meta.env.VITE_API_URL ||
+    (import.meta.env.DEV ? "http://localhost:8000" : "https://sih2026-wsw9.onrender.com")
+).replace(/\/+$/, "");
 
 type Source = { title: string; description: string };
 type Message = { role: "user" | "assistant"; content: string; sources?: Source[] };

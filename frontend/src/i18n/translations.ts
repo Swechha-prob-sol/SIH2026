@@ -122,7 +122,7 @@ export const translations: Record<Language, Translations> = {
     noResultsFound:
       "No matching BIS standards found for your query. Please rephrase or check standard codes.",
     serverConnectionError:
-      "Could not connect to the backend server. Please make sure Uvicorn backend is running on http://localhost:8000.",
+      "Could not connect to the backend server. Please ensure the backend is running and reachable.",
     relevantStandardFound: "Relevant Standard Found:",
     bisStandardFallback: "BIS Standard",
     indianStandardFallback: "Indian Standard",
@@ -189,7 +189,7 @@ export const translations: Record<Language, Translations> = {
     noResultsFound:
       "आपके प्रश्न के लिए कोई प्रासंगिक बीआईएस मानक नहीं मिला। कृपया दोबारा लिखें या मानक कोड जांचें।",
     serverConnectionError:
-      "बैकएंड सर्वर से कनेक्ट नहीं हो सका। कृपया सुनिश्चित करें कि यूविकॉर्न बैकएंड http://localhost:8000 पर चल रहा है।",
+      "बैकएंड सर्वर से कनेक्ट नहीं हो सका। कृपया सुनिश्चित करें कि बैकएंड सेवा उपलब्ध है।",
     relevantStandardFound: "प्रासंगिक मानक मिला:",
     bisStandardFallback: "बीआईएस मानक",
     indianStandardFallback: "भारतीय मानक",
