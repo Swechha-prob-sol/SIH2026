@@ -23,7 +23,13 @@ const getBackendUrl = (): string => {
         return import.meta.env.DEV ? "http://localhost:8000" : "https://sih2026-wsw9.onrender.com";
     }
 
-    url = url.replace(/\/query\/?$/, "").replace(/\/+$/, "");
+    // Strip accidental /query, /api/v1, /api, and trailing slashes so ${BACKEND_URL}/query hits FastAPI @app.post("/query")
+    url = url
+        .replace(/\/query\/?$/, "")
+        .replace(/\/api\/v1\/?$/, "")
+        .replace(/\/api\/?$/, "")
+        .replace(/\/+$/, "");
+
     if (!url.includes("localhost") && url.startsWith("http://")) {
         url = url.replace("http://", "https://");
     }

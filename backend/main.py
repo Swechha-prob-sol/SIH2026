@@ -43,10 +43,14 @@ app.add_middleware(
 )
 
 @app.get("/health")
+@app.get("/api/health")
+@app.get("/api/v1/health")
 def health_check():
     return {"status": "ok", "service": "BIS Assistant Compliance & RAG Engine"}
 
 @app.get("/standards")
+@app.get("/api/standards")
+@app.get("/api/v1/standards")
 def get_standards(db: Session = Depends(get_db)):
     standards = db.query(Standard).all()
     try:
@@ -88,6 +92,8 @@ def get_standards(db: Session = Depends(get_db)):
 
 
 @app.post("/query", response_model=QueryResponse)
+@app.post("/api/query", response_model=QueryResponse)
+@app.post("/api/v1/query", response_model=QueryResponse)
 def query_endpoint(request: QueryRequest):
     cache_key = f"query:{hashlib.sha256(request.query_text.encode()).hexdigest()}:{request.top_k}"
 
