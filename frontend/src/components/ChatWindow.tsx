@@ -4,11 +4,25 @@ import { useLanguage } from "../context/LanguageContext";
 import ReactMarkdown from "react-markdown";
 
 const getBackendUrl = (): string => {
+    // Check if running on localhost in browser
+    const isLocal = typeof window !== "undefined" && (
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1" ||
+        window.location.hostname === ""
+    );
+
     let url = (import.meta.env.VITE_API_URL || "").trim();
     url = url.replace(/^['"]+|['"]+$/g, "");
+
+    // If running on a remote host (e.g. *.vercel.app) and URL is empty or points to localhost, force Render production URL
+    if (!isLocal && (!url || url.includes("localhost") || url.includes("127.0.0.1"))) {
+        return "https://sih2026-wsw9.onrender.com";
+    }
+
     if (!url) {
         return import.meta.env.DEV ? "http://localhost:8000" : "https://sih2026-wsw9.onrender.com";
     }
+
     url = url.replace(/\/query\/?$/, "").replace(/\/+$/, "");
     if (!url.includes("localhost") && url.startsWith("http://")) {
         url = url.replace("http://", "https://");
@@ -132,14 +146,15 @@ function ChatWindow({ initialQuery, onClearInitialQuery }: ChatWindowProps) {
             ]);
         } catch (err: any) {
             console.error("Backend fetch error:", err);
-            const isColdStart = err?.message?.includes("502") || err?.message?.includes("503") || err?.message?.includes("504");
+            const errMsg = err?.message || String(err);
+            const isColdStart = errMsg.includes("502") || errMsg.includes("503") || errMsg.includes("504");
             setMessages((prev) => [
                 ...prev,
                 {
                     role: "assistant",
                     content: isColdStart
                         ? "⏳ The backend on Render free tier is waking up from idle mode (can take up to 45 seconds). Please resend your message now that the server is warm!"
-                        : t.serverConnectionError,
+                        : `${t.serverConnectionError}\n\n*(Debug: \`${BACKEND_URL}/query\` — ${errMsg})*`,
                 },
             ]);
         } finally {
